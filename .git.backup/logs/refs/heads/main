@@ -1,0 +1,8 @@
+0000000000000000000000000000000000000000 a68c7eb6887b30f2f372c5a60dae641926f3ea1e pheo898 <pheo898@users.noreply.github.com> 1778000408 +0700	commit (initial): feat: MVP V1.5 - file-based content + story summary
+a68c7eb6887b30f2f372c5a60dae641926f3ea1e a68c7eb6887b30f2f372c5a60dae641926f3ea1e pheo898 <pheo898@users.noreply.github.com> 1778000408 +0700	Branch: renamed refs/heads/main to refs/heads/main
+a68c7eb6887b30f2f372c5a60dae641926f3ea1e 6a119192818327e88bc2c3d6ad179788fea10aa1 pheo898 <pheo898@users.noreply.github.com> 1778001608 +0700	commit: chore: fix chapter format with frontmatter
+6a119192818327e88bc2c3d6ad179788fea10aa1 6ccedc0a169bbf17363efa7a6e9e90be2579565a pheo898 <pheo898@users.noreply.github.com> 1778003484 +0700	commit: fix: TypeScript errors and chapter parsing
+6ccedc0a169bbf17363efa7a6e9e90be2579565a 0da7d890f33743a063f1edbd0d4e30ddc0922ed5 pheo898 <pheo898@users.noreply.github.com> 1778003914 +0700	commit: fix: TypeScript types for gray-matter
+0da7d890f33743a063f1edbd0d4e30ddc0922ed5 fa2f4b1f04fd2c67f85b960b59b972346222c0a8 pheo898 <pheo898@users.noreply.github.com> 1778005479 +0700	commit: debug: add chapter parsing logs
+fa2f4b1f04fd2c67f85b960b59b972346222c0a8 00d34be09f2588bbcd891c2ef012d8aaba88ecef pheo898 <pheo898@users.noreply.github.com> 1778009523 +0700	commit: fix: use __dirname for contentDir to fix path resolution
+00d34be09f2588bbcd891c2ef012d8aaba88ecef f206b658215783a821987767e87b8aa2d7c6b0aa pheo898 <pheo898@users.noreply.github.com> 1778011715 +0700	commit: Add file-based story content
