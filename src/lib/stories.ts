@@ -196,8 +196,12 @@ async function getAllStoriesFromFS(): Promise<Story[]> {
 }
 
 export async function getAllStories(): Promise<Story[]> {
+  // This function is called at build time to generate all story pages
   return getAllStoriesFromFS();
 }
+
+// Export a build-time constant to force cache invalidation when logic changes
+export const BUILD_TIMESTAMP = new Date().toISOString();
 
 export async function getStoryBySlug(slug: string): Promise<Story | undefined> {
   const stories = await getAllStories();
