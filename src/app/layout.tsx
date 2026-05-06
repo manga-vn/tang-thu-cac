@@ -15,8 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Tàng Thư Các - Nơi lưu trữ các bộ truyện do tác giả tự sáng tác",
-  description: "Website đọc truyện tiểu thuyết với các bộ truyện tiên hiệp, huyền nghi và nhân quả.",
+  title: "Gac Truyen - Doc mot chuong, o lai mot doi.",
+  description: "Gac Truyen - website doc truyen chu: tien hiep, huyen huyen, do thi, ngon tinh. Giao dien sach, doc tot tren mobile.",
 };
 
 export const viewport = {

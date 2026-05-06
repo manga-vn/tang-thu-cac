@@ -27,16 +27,36 @@ body {
 .prose {
   line-height: 1.9;
   font-size: 1.125rem;
-  max-width: 70ch; /* Optimal reading length */
+  max-width: 70ch;
 }
 
 .prose p {
-  margin-bottom: 1.75rem; /* More breathing room between paragraphs */
+  margin-bottom: 1.75rem;
   text-align: justify;
   text-justify: inter-word;
+}
+
+/* Font serif cho trang đọc */
+.font-serif {
+  font-family: "Georgia", "Times New Roman", "Noto Serif", serif;
+}
+
+/* Mobile reading comfort */
+@media (max-width: 640px) {
+  .font-serif {
+    font-size: 1rem;
+    line-height: 1.85;
+  }
 }
 
 /* Smooth scrolling */
 html {
   scroll-behavior: smooth;
 }
+
+/* Line clamp utilities */
+.line-clamp-1 { overflow: hidden; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; }
+.line-clamp-2 { overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+
+/* Prevent text overflow on mobile */
+* { -webkit-tap-highlight-color: transparent; }

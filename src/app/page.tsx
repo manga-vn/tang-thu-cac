@@ -1,101 +1,181 @@
 import Link from "next/link";
 import Image from "next/image";
-import { getLatestChapters, getAllStories } from "@/lib/stories";
+import {
+  getLatestChapters,
+  getFeaturedStories,
+  getTopStories,
+  getAudioStories,
+  getRecentlyUpdatedStories,
+} from "@/lib/stories";
 import CoverPlaceholder from "@/components/CoverPlaceholder";
 import StoryCard from "@/components/StoryCard";
+import SectionHeader from "@/components/SectionHeader";
+import GenreBadge from "@/components/GenreBadge";
+import RankingList from "@/components/RankingList";
+import AudioBadge from "@/components/AudioBadge";
+
+export const metadata = {
+  title: "Gác Truyện – Đọc một chương, ở lại một đời.",
+  description: "Website đọc truyện chữ – tiên hiệp, huyền huyễn, đô thị, ngôn tình. Gác Truyện là nơi lưu giữ những câu chuyện đáng đọc.",
+};
+
+const FEATURED_GENRES = [
+  { name: "Tiên hiệp", emoji: "⚔️", desc: "Tu tiên, kiếm hiệp, huyền ảo" },
+  { name: "Huyền huyễn", emoji: "🌌", desc: "Phép thuật, thế giới kỳ ảo" },
+  { name: "Đô thị", emoji: "🏙️", desc: "Cuộc sống hiện đại, bí ẩn" },
+  { name: "Ngôn tình", emoji: "💕", desc: "Tình yêu ngọt ngào, lãng mạn" },
+  { name: "Sảng văn", emoji: "😄", desc: "Nhẹ nhàng, vui vẻ, giải trí" },
+  { name: "Hài hước", emoji: "🎭", desc: "Hài hước, dí dỏm, thư giãn" },
+];
 
 export default async function HomePage() {
-  const [latestChapters, allStories] = await Promise.all([
-    getLatestChapters(2),
-    getAllStories(),
+  const [latestChapters, featured, topStories, audioStories, recentStories] = await Promise.all([
+    getLatestChapters(6),
+    getFeaturedStories(4),
+    getTopStories(8),
+    getAudioStories(),
+    getRecentlyUpdatedStories(8),
   ]);
 
   return (
-    <div className="min-h-screen bg-[#F8F5EF]">
-      {/* Hero Section */}
-      <section className="bg-[#FFFDF8] border-b border-[#E5E0D8]">
-        <div className="max-w-6xl mx-auto px-4 py-16 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold text-amber-950 mb-4">
-            Tàng Thư Các
-          </h1>
-          <p className="text-xl text-amber-800/70 max-w-2xl mx-auto mb-8">
-            Nơi lưu trữ các bộ truyện do tác giả tự sáng tác.
+    <div className="min-h-screen">
+      {/* ── Hero ── */}
+      <section className="relative bg-gradient-to-br from-amber-950 via-amber-900 to-amber-800 text-white overflow-hidden">
+        <div className="absolute inset-0 opacity-10 bg-[url('/images/pattern.png')] bg-repeat" />
+        <div className="relative max-w-6xl mx-auto px-4 py-20 md:py-28 text-center">
+          <span className="inline-block text-5xl mb-4">📚</span>
+          <h1 className="text-4xl md:text-6xl font-bold mb-4 tracking-tight">Gác Truyện</h1>
+          <p className="text-xl md:text-2xl text-amber-200/90 font-light italic mb-8">
+            "Đọc một chương, ở lại một đời."
           </p>
-          <Link
-            href="/stories"
-            className="inline-block bg-[#8B5E34] text-white px-8 py-3 rounded-lg font-medium hover:bg-[#6F4726] transition-colors"
-          >
-            Danh sách truyện
-          </Link>
+          <p className="text-amber-300/70 max-w-xl mx-auto mb-10 text-sm leading-relaxed">
+            Nơi những câu chuyện tiên hiệp, đô thị, ngôn tình được viết ra từ trái tim — dành cho bạn đọc đam mê truyện chữ.
+          </p>
+          <div className="flex flex-wrap gap-3 justify-center">
+            <Link href="/stories"
+              className="bg-white text-amber-900 px-8 py-3 rounded-full font-semibold hover:bg-amber-50 transition-colors shadow-lg">
+              Đọc truyện ngay
+            </Link>
+            <Link href="#latest"
+              className="border border-white/40 text-white px-8 py-3 rounded-full font-medium hover:bg-white/10 transition-colors">
+              Truyện mới cập nhật
+            </Link>
+          </div>
         </div>
       </section>
 
-      {/* Latest Updates Section */}
-      <section className="max-w-6xl mx-auto px-4 py-12 bg-[#F8F5EF]">
-        <h2 className="text-2xl font-bold text-amber-950 mb-6">
-          Chương mới cập nhật
-        </h2>
-        {latestChapters.length > 0 ? (
-          <div className="space-y-4">
-            {latestChapters.map(({ story, chapter }) => (
-              <Link
-                key={`${story.id}-${chapter.id}`}
-                href={`/stories/${story.slug}/${chapter.slug}`}
-                className="block bg-[#FFFDF8] rounded-lg border border-[#E5E0D8] p-4 hover:shadow-sm transition-shadow"
-              >
-                <div className="flex gap-4">
-                  <div className="w-16 h-20 bg-amber-50 rounded flex-shrink-0 relative overflow-hidden">
-                    {story.coverImage ? (
-                      <Image
-                        src={story.coverImage}
-                        alt={story.title}
-                        fill
-                        className="object-cover"
-                        sizes="64px"
-                        unoptimized
-                      />
-                    ) : (
-                      <CoverPlaceholder title={story.title} className="text-xs" />
-                    )}
+      {/* ── Mới cập nhật ── */}
+      <section id="latest" className="max-w-6xl mx-auto px-4 py-14">
+        <SectionHeader title="📖 Mới cập nhật" subtitle="Những chương vừa được đăng" href="/stories" />
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {latestChapters.map(({ story, chapter }) => (
+            <Link key={`${story.id}-${chapter.id}`}
+              href={`/stories/${story.slug}/${chapter.slug}`}
+              className="flex gap-3 bg-[#FFFDF8] rounded-xl border border-[#E5E0D8] p-3 hover:shadow-md hover:border-amber-300 transition-all group">
+              <div className="w-14 h-20 bg-amber-50 rounded-lg shrink-0 relative overflow-hidden">
+                {story.coverImage ? (
+                  <Image src={story.coverImage} alt={story.title} fill className="object-cover" sizes="56px" unoptimized />
+                ) : (
+                  <CoverPlaceholder title={story.title} className="text-[8px]" />
+                )}
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="font-semibold text-amber-950 text-sm line-clamp-1 group-hover:text-amber-700 transition-colors">{story.title}</p>
+                <p className="text-amber-700/60 text-xs mb-1">{story.author ?? ''}</p>
+                <p className="text-amber-800/70 text-xs line-clamp-2">{chapter.title}</p>
+                <p className="text-xs text-amber-700/40 mt-1.5">
+                  {new Date(chapter.publishedAt).toLocaleDateString('vi-VN')}
+                </p>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* ── Đề cử ── */}
+      {featured.length > 0 && (
+        <section className="bg-amber-50/60 border-y border-[#E5E0D8]">
+          <div className="max-w-6xl mx-auto px-4 py-14">
+            <SectionHeader title="⭐ Truyện đề cử" subtitle="Được tác giả chọn lọc và giới thiệu" href="/stories" />
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-5">
+              {featured.map(story => <StoryCard key={story.id} story={story} />)}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ── Top truyện + Thể loại (2 cột) ── */}
+      <section className="max-w-6xl mx-auto px-4 py-14">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+          {/* Top truyện */}
+          <div className="lg:col-span-2">
+            <SectionHeader title="🏆 Top truyện" subtitle="Xếp hạng theo lượt đọc" />
+            {/* Tab giả lập */}
+            <div className="flex gap-1 mb-5 bg-amber-100 p-1 rounded-xl w-fit">
+              {['Top ngày', 'Top tuần', 'Top tháng'].map((tab, i) => (
+                <span key={tab} className={`px-4 py-1.5 rounded-lg text-sm font-medium cursor-default ${i === 0 ? 'bg-white text-amber-900 shadow-sm' : 'text-amber-700'}`}>
+                  {tab}
+                </span>
+              ))}
+            </div>
+            <RankingList stories={topStories.slice(0, 6)} />
+          </div>
+
+          {/* Thể loại nổi bật */}
+          <div>
+            <SectionHeader title="📚 Thể loại" />
+            <div className="grid grid-cols-2 lg:grid-cols-1 gap-2.5">
+              {FEATURED_GENRES.map(genre => (
+                <Link key={genre.name} href={`/stories?genre=${encodeURIComponent(genre.name)}`}
+                  className="flex items-center gap-3 bg-[#FFFDF8] border border-[#E5E0D8] rounded-xl p-3 hover:shadow-sm hover:border-amber-300 transition-all group">
+                  <span className="text-2xl shrink-0">{genre.emoji}</span>
+                  <div className="min-w-0">
+                    <p className="font-semibold text-amber-950 text-sm group-hover:text-amber-700 transition-colors">{genre.name}</p>
+                    <p className="text-amber-800/50 text-xs truncate">{genre.desc}</p>
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <h3 className="font-semibold text-amber-950 truncate">
-                      {story.title}
-                    </h3>
-                    <p className="text-amber-800/70 text-sm mb-2">
-                      {chapter.title}
-                    </p>
-                    <span className="text-xs text-amber-800/50">
-                      {new Date(chapter.publishedAt).toLocaleDateString('vi-VN')}
-                    </span>
-                  </div>
-                </div>
-              </Link>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Truyện mới ra ── */}
+      {recentStories.length > 0 && (
+        <section className="bg-amber-50/60 border-y border-[#E5E0D8]">
+          <div className="max-w-6xl mx-auto px-4 py-14">
+            <SectionHeader title="🆕 Truyện mới ra" href="/stories" />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {recentStories.slice(0, 4).map(story => <StoryCard key={story.id} story={story} layout="list" />)}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ── Audio ── */}
+      <section className="max-w-6xl mx-auto px-4 py-14">
+        <SectionHeader title="🎧 Truyện audio" subtitle="Vừa đọc vừa nghe" href="/audio" />
+        {audioStories.length > 0 ? (
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {audioStories.map(story => (
+              <div key={story.id} className="relative">
+                <StoryCard story={story} />
+                <div className="absolute top-2 left-2"><AudioBadge small /></div>
+              </div>
             ))}
           </div>
         ) : (
-          <p className="text-amber-800/60 text-center py-8">Chưa có chương nào</p>
+          <div className="bg-gradient-to-br from-purple-50 to-indigo-50 border border-purple-200 rounded-2xl p-10 text-center">
+            <span className="text-5xl mb-4 block">🎧</span>
+            <h3 className="text-lg font-bold text-purple-900 mb-2">Audio đang được phát triển</h3>
+            <p className="text-purple-700/70 text-sm max-w-md mx-auto">
+              Sắp tới bạn có thể vừa đọc vừa nghe các bộ truyện yêu thích. Hãy đón chờ nhé!
+            </p>
+            <Link href="/audio" className="inline-block mt-5 bg-purple-700 text-white px-6 py-2 rounded-full text-sm font-medium hover:bg-purple-800 transition-colors">
+              Tìm hiểu thêm
+            </Link>
+          </div>
         )}
-      </section>
-
-      {/* All Stories Section */}
-      <section className="max-w-6xl mx-auto px-4 py-12">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold text-amber-950">
-            Tất cả truyện
-          </h2>
-          <Link
-            href="/stories"
-            className="text-amber-800 hover:text-amber-950 font-medium text-sm"
-          >
-            Xem tất cả →
-          </Link>
-        </div>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-          {allStories.slice(0, 4).map((story) => (
-            <StoryCard key={story.id} story={story} />
-          ))}
-        </div>
       </section>
     </div>
   );

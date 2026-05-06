@@ -5,16 +5,24 @@ export interface Chapter {
   chapterNumber: number;
   content: string;
   publishedAt: string;
+  isVip?: boolean;
+  audioUrl?: string;
 }
 
 export interface Story {
   id: string;
   title: string;
   slug: string;
+  author: string;
   coverImage: string;
   genre: string[];
-  status: 'Đang viết' | 'Hoàn thành';
+  status: string;
   description: string;
   summary?: string;
+  featured?: boolean;
+  hasAudio?: boolean;
+  views?: number;
+  rating?: number;
+  updatedAt?: string;
   chapters: Chapter[];
 }
