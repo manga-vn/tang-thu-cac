@@ -6,7 +6,7 @@ import StoryCard from "@/components/StoryCard";
 
 export default async function HomePage() {
   const [latestChapters, allStories] = await Promise.all([
-    getLatestChapters(4),
+    getLatestChapters(2),
     getAllStories(),
   ]);
 

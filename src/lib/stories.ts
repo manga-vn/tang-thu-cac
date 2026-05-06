@@ -243,6 +243,12 @@ export async function getLatestChapters(limit: number = 5): Promise<{ story: Sto
   });
 
   return allChapters
-    .sort((a, b) => new Date(b.chapter.publishedAt).getTime() - new Date(a.chapter.publishedAt).getTime())
+    .sort((a, b) => {
+      // Sort by publishedAt descending first
+      const dateDiff = new Date(b.chapter.publishedAt).getTime() - new Date(a.chapter.publishedAt).getTime();
+      if (dateDiff !== 0) return dateDiff;
+      // If same publishedAt, sort by chapterNumber descending
+      return b.chapter.chapterNumber - a.chapter.chapterNumber;
+    })
     .slice(0, limit);
 }
