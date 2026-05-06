@@ -4,6 +4,13 @@ import fsSync from 'fs';
 import path from 'path';
 import grayMatter from 'gray-matter';
 
+// Type definition for gray-matter v0.3.5 return value
+interface GrayMatterResult {
+  context: Record<string, unknown>;
+  content: string;
+  original: string;
+}
+
 // Read content from process.cwd() as required
 const contentRoot = path.join(process.cwd(), 'content');
 
@@ -29,22 +36,23 @@ async function parseChapterFile(filePath: string): Promise<Chapter> {
     // Normalize line endings (CRLF/LF) - important for gray-matter parsing
     fileContent = fileContent.replace(/\r\n/g, '\n');
 
-    const { data, content } = grayMatter(fileContent);
+    const result = grayMatter(fileContent) as unknown as GrayMatterResult;
+    const { context, content } = result;
 
-    // Debug: log the first few lines of the file if data is invalid
-    if (!data || typeof data !== 'object') {
+    // Debug: log the first few lines of the file if context is invalid
+    if (!context || typeof context !== 'object') {
       const preview = fileContent.substring(0, 200).replace(/\n/g, '\\n');
-      throw new Error(`Chapter file "${filePath}" has invalid frontmatter: data type is ${typeof data}. File preview: ${preview}`);
+      throw new Error(`Chapter file "${filePath}" has invalid frontmatter: context type is ${typeof context}. File preview: ${preview}`);
     }
 
     const required = ['slug', 'title', 'chapterNumber', 'publishedAt'];
-    const missing = required.filter(field => !(field in data));
+    const missing = required.filter(field => !(field in context));
     if (missing.length > 0) {
       throw new Error(`Chapter file "${filePath}" missing required fields: ${missing.join(', ')}`);
     }
 
     // Type-safe extraction with fallbacks
-    const chapterData = data as Record<string, unknown>;
+    const chapterData = context as Record<string, unknown>;
 
     return {
       id: String(chapterData.slug),
@@ -81,11 +89,8 @@ async function loadStoryFromFS(storySlug: string): Promise<Story | null> {
 
     try {
       const files = await fs.readdir(chaptersDir);
-      console.log(`[loadStory] Raw files in chapters dir for "${storySlug}":`, files);
-
       // Only include files that match the expected pattern: chuong-<number>.md
       chapterFiles = files.filter(f => CHAPTER_FILE_PATTERN.test(f));
-      console.log(`[loadStory] Filtered chapter files for "${storySlug}":`, chapterFiles);
     } catch (err) {
       const error = err as Error;
       console.error(`[loadStory] Chapters directory error for "${storySlug}": ${error.message}`);
@@ -142,10 +147,6 @@ async function loadStoryFromFS(storySlug: string): Promise<Story | null> {
 // Load all stories from content folder
 async function getAllStoriesFromFS(): Promise<Story[]> {
   try {
-    console.log('[getAllStoriesFromFS] START - Building stories list');
-    console.log('[getAllStoriesFromFS] contentRoot:', contentRoot);
-    console.log('[getAllStoriesFromFS] contentRoot exists:', fsSync.existsSync(contentRoot));
-
     if (!fsSync.existsSync(contentRoot)) {
       const dirListing = fsSync.readdirSync(process.cwd(), { withFileTypes: true });
       const items = dirListing.map(d => d.name);
@@ -199,9 +200,6 @@ export async function getAllStories(): Promise<Story[]> {
   // This function is called at build time to generate all story pages
   return getAllStoriesFromFS();
 }
-
-// Export a build-time constant to force cache invalidation when logic changes
-export const BUILD_TIMESTAMP = new Date().toISOString();
 
 export async function getStoryBySlug(slug: string): Promise<Story | undefined> {
   const stories = await getAllStories();
