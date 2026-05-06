@@ -13,7 +13,11 @@ async function getChapterPath(storySlug: string, chapterSlug: string): Promise<s
 
 async function parseChapterFile(filePath: string): Promise<Chapter> {
   try {
-    const fileContent = await fs.readFile(filePath, 'utf-8');
+    let fileContent = await fs.readFile(filePath, 'utf-8');
+
+    // Normalize line endings (CRLF/LF) - important for gray-matter parsing
+    fileContent = fileContent.replace(/\r\n/g, '\n');
+
     const { data, content } = grayMatter(fileContent);
 
     // Debug: log what gray-matter returned
@@ -21,6 +25,9 @@ async function parseChapterFile(filePath: string): Promise<Chapter> {
 
     // Validate required fields
     if (!data || typeof data !== 'object') {
+      // Log first 200 chars to debug frontmatter issue
+      const preview = fileContent.substring(0, 200).replace(/\n/g, '\\n');
+      console.log(`[parse] File preview: ${preview}`);
       throw new Error(`Chapter file ${filePath} has invalid or missing frontmatter. Data: ${JSON.stringify(data)}`);
     }
 
@@ -69,13 +76,32 @@ async function loadStoryFromFS(storySlug: string): Promise<Story | null> {
       chapterFiles = [];
     }
 
+    // Load chapters with allSettled to not fail entire story on one bad chapter
     const chapterPromises = chapterFiles.map(async (file) => {
       const chapterSlug = file.replace(/\.md$/, '');
       return await parseChapterFile(await getChapterPath(storySlug, chapterSlug));
     });
 
-    const chapters = await Promise.all(chapterPromises);
-    console.log("[chapters] loaded for", storyData.slug, chapters.length);
+    const chapterResults = await Promise.allSettled(chapterPromises);
+
+    const chapters: Chapter[] = [];
+    const errors: string[] = [];
+
+    chapterResults.forEach((result, index) => {
+      if (result.status === 'fulfilled') {
+        chapters.push(result.value);
+      } else {
+        const file = chapterFiles[index];
+        errors.push(`Chapter file ${file}: ${result.reason instanceof Error ? result.reason.message : String(result.reason)}`);
+      }
+    });
+
+    // Log any chapter parsing errors
+    if (errors.length > 0) {
+      console.error(`[loadStory] Chapter errors for ${storyData.title}:`, errors);
+    }
+
+    console.log("[chapters] loaded for", storyData.slug, chapters.length, `(skipped ${errors.length})`);
 
     // Sort by chapterNumber
     chapters.sort((a, b) => a.chapterNumber - b.chapterNumber);
