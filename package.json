@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "new-chapter": "node scripts/new-chapter.cjs"
   },
   "dependencies": {
     "gray-matter": "^0.3.0",
