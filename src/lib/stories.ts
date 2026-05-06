@@ -142,6 +142,10 @@ async function loadStoryFromFS(storySlug: string): Promise<Story | null> {
 // Load all stories from content folder
 async function getAllStoriesFromFS(): Promise<Story[]> {
   try {
+    console.log('[getAllStoriesFromFS] START - Building stories list');
+    console.log('[getAllStoriesFromFS] contentRoot:', contentRoot);
+    console.log('[getAllStoriesFromFS] contentRoot exists:', fsSync.existsSync(contentRoot));
+
     if (!fsSync.existsSync(contentRoot)) {
       const dirListing = fsSync.readdirSync(process.cwd(), { withFileTypes: true });
       const items = dirListing.map(d => d.name);
