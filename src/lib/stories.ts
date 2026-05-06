@@ -20,14 +20,8 @@ async function parseChapterFile(filePath: string): Promise<Chapter> {
 
     const { data, content } = grayMatter(fileContent);
 
-    // Debug: log what gray-matter returned
-    console.log(`[parse] ${filePath.split('/').pop()}: data =`, data, 'content length:', content.length);
-
     // Validate required fields
     if (!data || typeof data !== 'object') {
-      // Log first 200 chars to debug frontmatter issue
-      const preview = fileContent.substring(0, 200).replace(/\n/g, '\\n');
-      console.log(`[parse] File preview: ${preview}`);
       throw new Error(`Chapter file ${filePath} has invalid or missing frontmatter. Data: ${JSON.stringify(data)}`);
     }
 
@@ -53,12 +47,10 @@ async function parseChapterFile(filePath: string): Promise<Chapter> {
 
 async function loadStoryFromFS(storySlug: string): Promise<Story | null> {
   const storyPath = path.join(contentRoot, storySlug, 'story.json');
-  console.log(`[loadStory] Path: ${storyPath}, exists: ${fsSync.existsSync(storyPath)}`);
 
   try {
     const storyContent = await fs.readFile(storyPath, 'utf-8');
     const storyData = JSON.parse(storyContent) as Omit<Story, 'chapters'>;
-    console.log(`[loadStory] Parsed story: ${storyData.title}`);
 
     // Load chapters
     const chaptersDir = path.join(contentRoot, storySlug, 'chapters');
