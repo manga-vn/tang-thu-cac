@@ -30,10 +30,10 @@ async function parseChapterFile(filePath: string): Promise<Chapter> {
 
     const { data, content } = grayMatter(fileContent);
 
-    // Validate that data is an object
+    // Debug: log the first few lines of the file if data is invalid
     if (!data || typeof data !== 'object') {
-      const dataType = typeof data;
-      throw new Error(`Chapter file "${filePath}" has invalid frontmatter: data type is ${dataType}`);
+      const preview = fileContent.substring(0, 200).replace(/\n/g, '\\n');
+      throw new Error(`Chapter file "${filePath}" has invalid frontmatter: data type is ${typeof data}. File preview: ${preview}`);
     }
 
     const required = ['slug', 'title', 'chapterNumber', 'publishedAt'];
@@ -80,8 +80,11 @@ async function loadStoryFromFS(storySlug: string): Promise<Story | null> {
 
     try {
       const files = await fs.readdir(chaptersDir);
+      console.log(`[loadStory] Raw files in chapters dir for "${storySlug}":`, files);
+
       // Only include files that match the expected pattern: chuong-<number>.md
       chapterFiles = files.filter(f => CHAPTER_FILE_PATTERN.test(f));
+      console.log(`[loadStory] Filtered chapter files for "${storySlug}":`, chapterFiles);
     } catch (err) {
       const error = err as Error;
       console.error(`[loadStory] Chapters directory error for "${storySlug}": ${error.message}`);
