@@ -4,11 +4,11 @@ import fsSync from 'fs';
 import path from 'path';
 import grayMatter from 'gray-matter';
 
-// Use __dirname to reliably locate content directory regardless of cwd
-const contentDir = path.join(__dirname, '..', '..', 'content');
+// Read content from process.cwd() as required
+const contentRoot = path.join(process.cwd(), 'content');
 
 async function getChapterPath(storySlug: string, chapterSlug: string): Promise<string> {
-  return path.join(contentDir, storySlug, 'chapters', `${chapterSlug}.md`);
+  return path.join(contentRoot, storySlug, 'chapters', `${chapterSlug}.md`);
 }
 
 async function parseChapterFile(filePath: string): Promise<Chapter> {
@@ -45,7 +45,7 @@ async function parseChapterFile(filePath: string): Promise<Chapter> {
 }
 
 async function loadStoryFromFS(storySlug: string): Promise<Story | null> {
-  const storyPath = path.join(contentDir, storySlug, 'story.json');
+  const storyPath = path.join(contentRoot, storySlug, 'story.json');
   console.log(`[loadStory] Path: ${storyPath}, exists: ${fsSync.existsSync(storyPath)}`);
 
   try {
@@ -54,7 +54,7 @@ async function loadStoryFromFS(storySlug: string): Promise<Story | null> {
     console.log(`[loadStory] Parsed story: ${storyData.title}`);
 
     // Load chapters
-    const chaptersDir = path.join(contentDir, storySlug, 'chapters');
+    const chaptersDir = path.join(contentRoot, storySlug, 'chapters');
     let chapterFiles: string[] = [];
 
     try {
@@ -100,22 +100,37 @@ async function loadStoryFromFS(storySlug: string): Promise<Story | null> {
 // Load all stories from content folder
 async function getAllStoriesFromFS(): Promise<Story[]> {
   try {
-    console.log('[stories] Loading from content dir:', contentDir);
+    // Debug logs as required
+    console.log("[content] cwd:", process.cwd());
+    console.log("[content] root:", contentRoot);
+    console.log("[content] root exists:", fsSync.existsSync(contentRoot));
 
-    if (!fsSync.existsSync(contentDir)) {
-      console.log('[stories] contentDir does not exist, returning empty');
-      return [];
+    if (!fsSync.existsSync(contentRoot)) {
+      const dirListing = fsSync.readdirSync(process.cwd(), { withFileTypes: true });
+      const items = dirListing.map(d => d.name);
+      throw new Error(`Content directory not found!\n` +
+        `  process.cwd(): ${process.cwd()}\n` +
+        `  contentRoot: ${contentRoot}\n` +
+        `  Directory listing of cwd: ${JSON.stringify(items)}`);
     }
 
-    const dirents = await fs.readdir(contentDir, { withFileTypes: true });
-    const storyDirs = dirents
+    const dirents = await fs.readdir(contentRoot, { withFileTypes: true });
+    const storyFolders = dirents
       .filter(dirent => dirent.isDirectory())
       .map(dirent => dirent.name);
 
-    console.log('[stories] Found story directories:', storyDirs);
+    console.log("[content] story folders:", storyFolders);
+
+    if (storyFolders.length === 0) {
+      const dirListing = fsSync.readdirSync(contentRoot, { withFileTypes: true });
+      const items = dirListing.map(d => d.name);
+      throw new Error(`No story folders found in content directory!\n` +
+        `  contentRoot: ${contentRoot}\n` +
+        `  Contents: ${JSON.stringify(items)}`);
+    }
 
     const loadedStories = await Promise.all(
-      storyDirs.map(async (dir) => {
+      storyFolders.map(async (dir) => {
         console.log(`[stories] Loading story: ${dir}`);
         const story = await loadStoryFromFS(dir);
         return story;
@@ -125,12 +140,17 @@ async function getAllStoriesFromFS(): Promise<Story[]> {
     const filtered = loadedStories
       .filter((story): story is Story => story !== null);
 
-    console.log('[stories] Loaded stories count:', filtered.length);
+    console.log("[content] stories loaded:", filtered.length);
+
+    // Log chapters for each story
+    filtered.forEach(story => {
+      console.log(`[content] chapters loaded for ${story.slug}: ${story.chapters.length}`);
+    });
 
     return filtered.sort((a, b) => a.title.localeCompare(b.title));
   } catch (error) {
     console.error('[stories] Error loading stories:', error);
-    return [];
+    throw error;
   }
 }
 
