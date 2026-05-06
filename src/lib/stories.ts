@@ -55,45 +55,38 @@ async function loadStoryFromFS(storySlug: string): Promise<Story | null> {
 
     // Load chapters
     const chaptersDir = path.join(contentRoot, storySlug, 'chapters');
+    console.log("[chapters] folder:", chaptersDir);
+
     let chapterFiles: string[] = [];
 
     try {
       const files = await fs.readdir(chaptersDir);
       chapterFiles = files.filter(f => f.endsWith('.md'));
-      console.log(`[loadStory] Found ${chapterFiles.length} chapter files`);
+      console.log("[chapters] files:", chapterFiles);
     } catch (err) {
       const error = err as Error;
-      console.log(`[loadStory] Chapters dir error:`, error.message);
+      console.error(`[loadStory] Chapters dir error:`, error.message);
       chapterFiles = [];
     }
 
     const chapterPromises = chapterFiles.map(async (file) => {
-      try {
-        const chapterSlug = file.replace(/\.md$/, '');
-        return await parseChapterFile(await getChapterPath(storySlug, chapterSlug));
-      } catch (error) {
-        console.error(`Failed to parse chapter ${file}:`, error);
-        return null;
-      }
+      const chapterSlug = file.replace(/\.md$/, '');
+      return await parseChapterFile(await getChapterPath(storySlug, chapterSlug));
     });
 
     const chapters = await Promise.all(chapterPromises);
-
-    // Filter out failed chapters
-    const validChapters = chapters.filter((c): c is Chapter => c !== null);
-
-    console.log(`[loadStory] Parsed ${validChapters.length} valid chapters out of ${chapterFiles.length}`);
+    console.log("[chapters] loaded for", storyData.slug, chapters.length);
 
     // Sort by chapterNumber
-    validChapters.sort((a, b) => a.chapterNumber - b.chapterNumber);
+    chapters.sort((a, b) => a.chapterNumber - b.chapterNumber);
 
     return {
       ...storyData,
-      chapters: validChapters,
+      chapters: chapters,
     };
   } catch (error) {
     console.error(`[loadStory] Error loading ${storySlug}:`, error);
-    return null;
+    throw error;
   }
 }
 
