@@ -1,0 +1,3 @@
+{
+  "/stories/[storySlug]/[chapterSlug]/page": "app/stories/[storySlug]/[chapterSlug]/page.js"
+}
