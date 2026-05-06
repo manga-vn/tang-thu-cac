@@ -13,6 +13,7 @@ const CHAPTER_FILE_PATTERN = /^chuong-\d+\.md$/;
 // Validate that a story slug is safe for filesystem operations
 function isValidSlug(slug: string): boolean {
   // Allow alphanumeric, dash, underscore only (safe for paths)
+  // This prevents path traversal and ensures consistent slug format
   return /^[a-zA-Z0-9_-]+$/.test(slug);
 }
 
