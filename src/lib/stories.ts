@@ -7,7 +7,17 @@ import grayMatter from 'gray-matter';
 // Read content from process.cwd() as required
 const contentRoot = path.join(process.cwd(), 'content');
 
+// Pattern to match valid chapter filenames: chuong-<number>.md
+const CHAPTER_FILE_PATTERN = /^chuong-\d+\.md$/;
+
+// Validate that a story slug is safe for filesystem operations
+function isValidSlug(slug: string): boolean {
+  // Allow alphanumeric, dash, underscore only (safe for paths)
+  return /^[a-zA-Z0-9_-]+$/.test(slug);
+}
+
 async function getChapterPath(storySlug: string, chapterSlug: string): Promise<string> {
+  // No sanitization needed - chapterSlug comes from trusted filename pattern
   return path.join(contentRoot, storySlug, 'chapters', `${chapterSlug}.md`);
 }
 
@@ -20,32 +30,43 @@ async function parseChapterFile(filePath: string): Promise<Chapter> {
 
     const { data, content } = grayMatter(fileContent);
 
-    // Validate required fields
+    // Validate that data is an object
     if (!data || typeof data !== 'object') {
-      throw new Error(`Chapter file ${filePath} has invalid or missing frontmatter. Data: ${JSON.stringify(data)}`);
+      const dataType = typeof data;
+      throw new Error(`Chapter file "${filePath}" has invalid frontmatter: data type is ${dataType}`);
     }
 
     const required = ['slug', 'title', 'chapterNumber', 'publishedAt'];
-    const missing = required.filter(field => !data[field]);
+    const missing = required.filter(field => !(field in data));
     if (missing.length > 0) {
-      throw new Error(`Chapter file ${filePath} missing required fields: ${missing.join(', ')}. Data: ${JSON.stringify(data)}`);
+      throw new Error(`Chapter file "${filePath}" missing required fields: ${missing.join(', ')}`);
     }
 
+    // Type-safe extraction with fallbacks
+    const chapterData = data as Record<string, unknown>;
+
     return {
-      id: data.slug,
-      title: data.title,
-      slug: data.slug,
-      chapterNumber: data.chapterNumber,
-      content: content.trim(),
-      publishedAt: data.publishedAt,
+      id: String(chapterData.slug),
+      title: String(chapterData.title),
+      slug: String(chapterData.slug),
+      chapterNumber: Number(chapterData.chapterNumber),
+      content: String(content).trim(),
+      publishedAt: String(chapterData.publishedAt),
     };
   } catch (error) {
-    console.error(`Error parsing chapter file ${filePath}:`, error);
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    console.error(`Failed to parse chapter file "${filePath}": ${errorMessage}`);
     throw error;
   }
 }
 
 async function loadStoryFromFS(storySlug: string): Promise<Story | null> {
+  // Validate storySlug for security
+  if (!isValidSlug(storySlug)) {
+    console.error(`[loadStory] Invalid story slug: "${storySlug}" - contains unsafe characters`);
+    return null;
+  }
+
   const storyPath = path.join(contentRoot, storySlug, 'story.json');
 
   try {
@@ -54,24 +75,31 @@ async function loadStoryFromFS(storySlug: string): Promise<Story | null> {
 
     // Load chapters
     const chaptersDir = path.join(contentRoot, storySlug, 'chapters');
-    console.log("[chapters] folder:", chaptersDir);
 
     let chapterFiles: string[] = [];
 
     try {
       const files = await fs.readdir(chaptersDir);
-      chapterFiles = files.filter(f => f.endsWith('.md'));
-      console.log("[chapters] files:", chapterFiles);
+      // Only include files that match the expected pattern: chuong-<number>.md
+      chapterFiles = files.filter(f => CHAPTER_FILE_PATTERN.test(f));
     } catch (err) {
       const error = err as Error;
-      console.error(`[loadStory] Chapters dir error:`, error.message);
+      console.error(`[loadStory] Chapters directory error for "${storySlug}": ${error.message}`);
       chapterFiles = [];
     }
 
     // Load chapters with allSettled to not fail entire story on one bad chapter
-    const chapterPromises = chapterFiles.map(async (file) => {
+    const chapterPromises: Promise<Chapter | null>[] = chapterFiles.map(async (file): Promise<Chapter | null> => {
+      // Extract slug from filename (remove .md extension)
+      // File is already validated by CHAPTER_FILE_PATTERN, so slug is safe
       const chapterSlug = file.replace(/\.md$/, '');
-      return await parseChapterFile(await getChapterPath(storySlug, chapterSlug));
+
+      try {
+        return await parseChapterFile(await getChapterPath(storySlug, chapterSlug));
+      } catch (error) {
+        // Individual chapter failure - return null to be filtered out
+        return null;
+      }
     });
 
     const chapterResults = await Promise.allSettled(chapterPromises);
@@ -80,20 +108,18 @@ async function loadStoryFromFS(storySlug: string): Promise<Story | null> {
     const errors: string[] = [];
 
     chapterResults.forEach((result, index) => {
-      if (result.status === 'fulfilled') {
+      if (result.status === 'fulfilled' && result.value !== null) {
         chapters.push(result.value);
-      } else {
+      } else if (result.status === 'rejected') {
         const file = chapterFiles[index];
-        errors.push(`Chapter file ${file}: ${result.reason instanceof Error ? result.reason.message : String(result.reason)}`);
+        errors.push(`"${file}": ${result.reason instanceof Error ? result.reason.message : String(result.reason)}`);
       }
     });
 
     // Log any chapter parsing errors
     if (errors.length > 0) {
-      console.error(`[loadStory] Chapter errors for ${storyData.title}:`, errors);
+      console.error(`[loadStory] Chapter errors for "${storyData.title}":`, errors);
     }
-
-    console.log("[chapters] loaded for", storyData.slug, chapters.length, `(skipped ${errors.length})`);
 
     // Sort by chapterNumber
     chapters.sort((a, b) => a.chapterNumber - b.chapterNumber);
@@ -103,7 +129,8 @@ async function loadStoryFromFS(storySlug: string): Promise<Story | null> {
       chapters: chapters,
     };
   } catch (error) {
-    console.error(`[loadStory] Error loading ${storySlug}:`, error);
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    console.error(`[loadStory] Failed to load story "${storySlug}": ${errorMessage}`);
     throw error;
   }
 }
@@ -111,11 +138,6 @@ async function loadStoryFromFS(storySlug: string): Promise<Story | null> {
 // Load all stories from content folder
 async function getAllStoriesFromFS(): Promise<Story[]> {
   try {
-    // Debug logs as required
-    console.log("[content] cwd:", process.cwd());
-    console.log("[content] root:", contentRoot);
-    console.log("[content] root exists:", fsSync.existsSync(contentRoot));
-
     if (!fsSync.existsSync(contentRoot)) {
       const dirListing = fsSync.readdirSync(process.cwd(), { withFileTypes: true });
       const items = dirListing.map(d => d.name);
@@ -128,21 +150,21 @@ async function getAllStoriesFromFS(): Promise<Story[]> {
     const dirents = await fs.readdir(contentRoot, { withFileTypes: true });
     const storyFolders = dirents
       .filter(dirent => dirent.isDirectory())
-      .map(dirent => dirent.name);
-
-    console.log("[content] story folders:", storyFolders);
+      .map(dirent => dirent.name)
+      // Validate folder names are safe slugs
+      .filter(name => isValidSlug(name));
 
     if (storyFolders.length === 0) {
       const dirListing = fsSync.readdirSync(contentRoot, { withFileTypes: true });
       const items = dirListing.map(d => d.name);
-      throw new Error(`No story folders found in content directory!\n` +
+      throw new Error(`No valid story folders found in content directory!\n` +
         `  contentRoot: ${contentRoot}\n` +
-        `  Contents: ${JSON.stringify(items)}`);
+        `  Contents: ${JSON.stringify(items)}\n` +
+        `  Note: Story folder names must match pattern: ^[a-zA-Z0-9_-]+$`);
     }
 
     const loadedStories = await Promise.all(
       storyFolders.map(async (dir) => {
-        console.log(`[stories] Loading story: ${dir}`);
         const story = await loadStoryFromFS(dir);
         return story;
       })
@@ -151,16 +173,16 @@ async function getAllStoriesFromFS(): Promise<Story[]> {
     const filtered = loadedStories
       .filter((story): story is Story => story !== null);
 
-    console.log("[content] stories loaded:", filtered.length);
-
-    // Log chapters for each story
-    filtered.forEach(story => {
-      console.log(`[content] chapters loaded for ${story.slug}: ${story.chapters.length}`);
-    });
+    // Log chapters for each story (only in dev/build time, not production)
+    if (process.env.NODE_ENV !== 'production') {
+      filtered.forEach(story => {
+        console.log(`[content] chapters loaded for ${story.slug}: ${story.chapters.length}`);
+      });
+    }
 
     return filtered.sort((a, b) => a.title.localeCompare(b.title));
   } catch (error) {
-    console.error('[stories] Error loading stories:', error);
+    console.error('[stories] Error loading stories:', error instanceof Error ? error.message : error);
     throw error;
   }
 }
