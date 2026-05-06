@@ -1,0 +1,1 @@
+self.__SSG_MANIFEST=new Set(["\u002Fstories\u002F[storySlug]","\u002Fstories\u002F[storySlug]\u002F[chapterSlug]"]);self.__SSG_MANIFEST_CB&&self.__SSG_MANIFEST_CB()
