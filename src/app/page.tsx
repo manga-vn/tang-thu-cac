@@ -45,20 +45,24 @@ export default async function HomePage() {
         <div className="relative max-w-6xl mx-auto px-4 py-20 md:py-28 text-center">
           <span className="inline-block text-5xl mb-4">📚</span>
           <h1 className="text-4xl md:text-6xl font-bold mb-4 tracking-tight">Gác Truyện</h1>
-          <p className="text-xl md:text-2xl text-amber-200/90 font-light italic mb-8">
+          <p className="text-xl md:text-2xl text-amber-200/90 font-light italic mb-6">
             "Đọc một chương, ở lại một đời."
           </p>
           <p className="text-amber-300/70 max-w-xl mx-auto mb-10 text-sm leading-relaxed">
-            Nơi những câu chuyện tiên hiệp, đô thị, ngôn tình được viết ra từ trái tim — dành cho bạn đọc đam mê truyện chữ.
+            Kho truyện chữ dành cho tiên hiệp, đô thị, huyền nghi và tình cảm dài kỳ.
           </p>
           <div className="flex flex-wrap gap-3 justify-center">
-            <Link href="/stories"
+            <Link href="/stories/vong-xuyen-diep"
               className="bg-white text-amber-900 px-8 py-3 rounded-full font-semibold hover:bg-amber-50 transition-colors shadow-lg">
-              Đọc truyện ngay
+              Đọc Vong Xuyên Điệp
             </Link>
             <Link href="#latest"
               className="border border-white/40 text-white px-8 py-3 rounded-full font-medium hover:bg-white/10 transition-colors">
               Truyện mới cập nhật
+            </Link>
+            <Link href="/stories"
+              className="border border-white/40 text-white px-8 py-3 rounded-full font-medium hover:bg-white/10 transition-colors">
+              Khám phá danh sách truyện
             </Link>
           </div>
         </div>
@@ -66,7 +70,7 @@ export default async function HomePage() {
 
       {/* ── Mới cập nhật ── */}
       <section id="latest" className="max-w-6xl mx-auto px-4 py-14">
-        <SectionHeader title="📖 Mới cập nhật" subtitle="Những chương vừa được đăng" href="/stories" />
+        <SectionHeader title="📖 Mới cập nhật" subtitle="Các chương vừa được đăng gần đây" href="/stories" />
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {latestChapters.map(({ story, chapter }) => (
             <Link key={`${story.id}-${chapter.id}`}
@@ -96,7 +100,7 @@ export default async function HomePage() {
       {featured.length > 0 && (
         <section className="bg-amber-50/60 border-y border-[#E5E0D8]">
           <div className="max-w-6xl mx-auto px-4 py-14">
-            <SectionHeader title="⭐ Truyện đề cử" subtitle="Được tác giả chọn lọc và giới thiệu" href="/stories" />
+            <SectionHeader title="⭐ Truyện đề cử" subtitle="Những bộ nên đọc trước" href="/stories" />
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-5">
               {featured.map(story => <StoryCard key={story.id} story={story} />)}
             </div>
@@ -109,7 +113,7 @@ export default async function HomePage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
           {/* Top truyện */}
           <div className="lg:col-span-2">
-            <SectionHeader title="🏆 Top truyện" subtitle="Xếp hạng theo lượt đọc" />
+            <SectionHeader title="🏆 Top truyện" subtitle="Các truyện được đọc nhiều nhất" />
             {/* Tab giả lập */}
             <div className="flex gap-1 mb-5 bg-amber-100 p-1 rounded-xl w-fit">
               {['Top ngày', 'Top tuần', 'Top tháng'].map((tab, i) => (
@@ -144,7 +148,7 @@ export default async function HomePage() {
       {recentStories.length > 0 && (
         <section className="bg-amber-50/60 border-y border-[#E5E0D8]">
           <div className="max-w-6xl mx-auto px-4 py-14">
-            <SectionHeader title="🆕 Truyện mới ra" href="/stories" />
+            <SectionHeader title="🆕 Truyện mới ra" subtitle="Những bộ truyện mới được mở" href="/stories" />
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {recentStories.slice(0, 4).map(story => <StoryCard key={story.id} story={story} layout="list" />)}
             </div>
@@ -154,7 +158,7 @@ export default async function HomePage() {
 
       {/* ── Audio ── */}
       <section className="max-w-6xl mx-auto px-4 py-14">
-        <SectionHeader title="🎧 Truyện audio" subtitle="Vừa đọc vừa nghe" href="/audio" />
+        <SectionHeader title="🎧 Truyện audio" subtitle="Vừa đọc vừa nghe — sắp ra mắt" href="/audio" />
         {audioStories.length > 0 ? (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {audioStories.map(story => (
