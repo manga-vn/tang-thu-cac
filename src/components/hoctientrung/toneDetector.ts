@@ -111,48 +111,33 @@ export async function recordAndAnalyzeTone(durationMs = 2000): Promise<ToneResul
 }
 
 // ─── TTS: Speak a Chinese word using Web Speech API ───────────────────────────
-// Fix cho mobile: getVoices() trả về [] lần đầu trên iOS/Android.
-// Dùng voiceschanged event để cache voices, sau đó speak.
-
-let _cachedZhVoice: SpeechSynthesisVoice | null | undefined = undefined  // undefined = chưa load
-
-function getCachedZhVoice(): SpeechSynthesisVoice | null {
-  if (typeof window === 'undefined' || !window.speechSynthesis) return null
-  if (_cachedZhVoice !== undefined) return _cachedZhVoice
-
-  const voices = window.speechSynthesis.getVoices()
-  if (voices.length > 0) {
-    _cachedZhVoice = voices.find(v => v.lang.startsWith('zh')) ?? null
-    return _cachedZhVoice
-  }
-
-  // Voices chưa load — đăng ký listener để cache cho lần sau
-  window.speechSynthesis.addEventListener('voiceschanged', () => {
-    const v = window.speechSynthesis.getVoices()
-    _cachedZhVoice = v.find(vv => vv.lang.startsWith('zh')) ?? null
-  }, { once: true })
-
-  return null  // sẽ dùng default voice lần này, lần sau sẽ có zh voice
-}
+// Rules:
+//   1. speak() PHẢI gọi sync từ user gesture (iOS requirement)
+//   2. KHÔNG set .voice — để browser/OS tự chọn theo lang (Android requirement)
+//   3. cancel() + resume() trước khi speak để tránh stuck state
 
 export function speakChinese(text: string, rate = 0.85): void {
   if (typeof window === 'undefined' || !window.speechSynthesis) return
+  const synth = window.speechSynthesis
 
-  // iOS: cancel trước, rồi delay nhỏ tránh bug queue trên Safari mobile
-  window.speechSynthesis.cancel()
+  // Reset state
+  synth.cancel()
+  if (synth.paused) synth.resume()
 
-  const doSpeak = () => {
-    const utter = new SpeechSynthesisUtterance(text)
-    utter.lang = 'zh-CN'
-    utter.rate = rate
-    utter.pitch = 1
-    const zhVoice = getCachedZhVoice()
-    if (zhVoice) utter.voice = zhVoice
-    window.speechSynthesis.speak(utter)
-  }
+  const utter = new SpeechSynthesisUtterance(text)
+  utter.lang = 'zh-CN'
+  utter.rate = rate
+  utter.pitch = 1
+  // KHÔNG set utter.voice — Android/iOS tự chọn engine phù hợp theo lang
+  // Nếu set sai voice object → im lặng hoàn toàn
 
-  // Delay nhỏ giúp iOS Safari xử lý cancel() trước khi speak()
-  setTimeout(doSpeak, 50)
+  synth.speak(utter)
+}
+
+// Kiểm tra TTS có khả năng hoạt động không (không đảm bảo 100% vì cần TTS engine)
+export function checkTTSLikely(): boolean {
+  if (typeof window === 'undefined' || !('speechSynthesis' in window)) return false
+  return true
 }
 
 // Check if browser supports required APIs
