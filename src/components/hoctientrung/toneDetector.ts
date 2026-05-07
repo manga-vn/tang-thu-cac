@@ -110,19 +110,49 @@ export async function recordAndAnalyzeTone(durationMs = 2000): Promise<ToneResul
   return classifyTone(pitches)
 }
 
-// Speak a Chinese word using Web Speech TTS
-export function speakChinese(text: string, rate = 0.85): void {
-  if (!window.speechSynthesis) return
-  window.speechSynthesis.cancel()
-  const utter = new SpeechSynthesisUtterance(text)
-  utter.lang = 'zh-CN'
-  utter.rate = rate
-  utter.pitch = 1
-  // Prefer a Chinese voice if available
+// ─── TTS: Speak a Chinese word using Web Speech API ───────────────────────────
+// Fix cho mobile: getVoices() trả về [] lần đầu trên iOS/Android.
+// Dùng voiceschanged event để cache voices, sau đó speak.
+
+let _cachedZhVoice: SpeechSynthesisVoice | null | undefined = undefined  // undefined = chưa load
+
+function getCachedZhVoice(): SpeechSynthesisVoice | null {
+  if (typeof window === 'undefined' || !window.speechSynthesis) return null
+  if (_cachedZhVoice !== undefined) return _cachedZhVoice
+
   const voices = window.speechSynthesis.getVoices()
-  const zhVoice = voices.find(v => v.lang.startsWith('zh'))
-  if (zhVoice) utter.voice = zhVoice
-  window.speechSynthesis.speak(utter)
+  if (voices.length > 0) {
+    _cachedZhVoice = voices.find(v => v.lang.startsWith('zh')) ?? null
+    return _cachedZhVoice
+  }
+
+  // Voices chưa load — đăng ký listener để cache cho lần sau
+  window.speechSynthesis.addEventListener('voiceschanged', () => {
+    const v = window.speechSynthesis.getVoices()
+    _cachedZhVoice = v.find(vv => vv.lang.startsWith('zh')) ?? null
+  }, { once: true })
+
+  return null  // sẽ dùng default voice lần này, lần sau sẽ có zh voice
+}
+
+export function speakChinese(text: string, rate = 0.85): void {
+  if (typeof window === 'undefined' || !window.speechSynthesis) return
+
+  // iOS: cancel trước, rồi delay nhỏ tránh bug queue trên Safari mobile
+  window.speechSynthesis.cancel()
+
+  const doSpeak = () => {
+    const utter = new SpeechSynthesisUtterance(text)
+    utter.lang = 'zh-CN'
+    utter.rate = rate
+    utter.pitch = 1
+    const zhVoice = getCachedZhVoice()
+    if (zhVoice) utter.voice = zhVoice
+    window.speechSynthesis.speak(utter)
+  }
+
+  // Delay nhỏ giúp iOS Safari xử lý cancel() trước khi speak()
+  setTimeout(doSpeak, 50)
 }
 
 // Check if browser supports required APIs
