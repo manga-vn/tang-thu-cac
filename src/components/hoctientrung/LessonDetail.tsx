@@ -12,6 +12,7 @@ import {
   getActiveScope, getLessonProgress, markDrillDone,
   markLessonComplete, LessonProgress,
 } from './storage'
+import PronunciationButton from './PronunciationButton'
 
 // ─────────────────────────────────────────────────────
 // Types & helpers
@@ -356,10 +357,7 @@ function SectionVocab({ lesson, tts }: { lesson: Lesson; tts: boolean }) {
               <>
                 <p className="text-xs text-amber-800/70 mt-1">{v.vi}</p>
                 {tts && (
-                  <button onClick={e => { e.stopPropagation(); playChineseAudio(v.ttsText) }}
-                    className="mt-2 text-xs bg-amber-100 hover:bg-amber-200 text-amber-700 px-2 py-1 rounded-lg transition-colors">
-                    🔊 Nghe
-                  </button>
+                  <PronunciationButton text={v.ttsText || v.hanzi} size="sm" />
                 )}
               </>
             )}

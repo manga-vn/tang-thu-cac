@@ -1,7 +1,8 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { Word, ProgressMap } from './storage'
+import PronunciationButton from './PronunciationButton'
 
 interface Props {
   vocabulary: Word[]
@@ -63,6 +64,7 @@ export default function WordList({ vocabulary, allTags, onDelete, canDelete = fa
                   <div className="flex items-baseline gap-2 flex-wrap">
                     <span className="text-xl font-bold text-amber-950">{w.chinese}</span>
                     <span className="text-sm text-amber-800/50">{w.pinyin}</span>
+                    <PronunciationButton text={w.chinese} size="sm" />
                   </div>
                   {showMeaning && <p className="text-sm text-amber-800/80 mt-0.5">{w.meaning}</p>}
                   {showMeaning && w.example && <p className="text-xs text-amber-800/40 mt-1 italic">{w.example}</p>}
