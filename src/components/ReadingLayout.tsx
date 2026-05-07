@@ -1,8 +1,9 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { Chapter, Story } from '@/data/stories';
+import SaveWordModal from '@/components/hoctientrung/SaveWordModal';
 
 interface ReadingLayoutProps {
   story: Story;
@@ -22,6 +23,36 @@ export default function ReadingLayout({ story, chapter, prevChapter, nextChapter
   const [fontIndex, setFontIndex] = useState(1);
   const [showSettings, setShowSettings] = useState(false);
   const current = FONT_SIZES[fontIndex];
+
+  // --- Lưu từ feature ---
+  const [saveWord, setSaveWord] = useState<{ text: string; x: number; y: number } | null>(null);
+  const [showModal, setShowModal] = useState(false);
+  const articleRef = useRef<HTMLElement>(null);
+
+  const handleMouseUp = useCallback(() => {
+    const sel = window.getSelection();
+    if (!sel || sel.rangeCount === 0) return;
+    const text = sel.toString().trim();
+    // Only trigger for plausible Chinese text (1–8 chars, contains CJK)
+    if (!text || text.length > 8 || !/[一-鿿]/.test(text)) {
+      setSaveWord(null);
+      return;
+    }
+    const range = sel.getRangeAt(0);
+    const rect  = range.getBoundingClientRect();
+    setSaveWord({ text, x: rect.left + rect.width / 2, y: rect.top + window.scrollY - 12 });
+  }, []);
+
+  useEffect(() => {
+    const el = articleRef.current;
+    if (!el) return;
+    el.addEventListener('mouseup', handleMouseUp);
+    // Also support touch
+    el.addEventListener('touchend', handleMouseUp);
+    return () => { el.removeEventListener('mouseup', handleMouseUp); el.removeEventListener('touchend', handleMouseUp); };
+  }, [handleMouseUp]);
+
+  const sourceLabel = `${story.title} – ${chapter.title}`;
 
   return (
     <div className="min-h-screen bg-[#F8F5EF]">
@@ -74,11 +105,31 @@ export default function ReadingLayout({ story, chapter, prevChapter, nextChapter
       </div>
 
       {/* Content */}
-      <article className="max-w-3xl mx-auto px-5 md:px-8 py-10">
+      <article ref={articleRef} className="max-w-3xl mx-auto px-5 md:px-8 py-10 relative">
         <div className={`${current.value} ${current.lineHeight} text-amber-950/90 font-sans`}>
           {children}
         </div>
       </article>
+
+      {/* Floating "Lưu từ" bubble on text selection */}
+      {saveWord && !showModal && (
+        <button
+          onClick={() => { setShowModal(true); setSaveWord(null); }}
+          style={{ position: 'absolute', top: saveWord.y, left: saveWord.x, transform: 'translate(-50%, -100%)' }}
+          className="z-50 bg-amber-700 text-white text-xs font-semibold px-3 py-1.5 rounded-full shadow-lg hover:bg-amber-800 active:scale-95 transition-all whitespace-nowrap"
+        >
+          📚 Lưu từ
+        </button>
+      )}
+
+      {/* Save word modal */}
+      {showModal && (
+        <SaveWordModal
+          selectedText={saveWord?.text ?? window.getSelection()?.toString().trim() ?? ''}
+          source={sourceLabel}
+          onClose={() => setShowModal(false)}
+        />
+      )}
 
       {/* Chapter Navigation */}
       <div className="border-t border-[#E5E0D8] bg-[#FFFDF8]">
