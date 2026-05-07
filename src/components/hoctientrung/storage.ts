@@ -13,6 +13,7 @@ export interface Word {
   addedBy: string
   addedAt: string
   source?: string   // e.g. "Vòng Xuyến Điệp – Chương 3"
+  tone?: number     // 1=ngang, 2=sắc, 3=hỏi, 4=nặng, 0=nhẹ
 }
 
 export interface ProgressEntry {
