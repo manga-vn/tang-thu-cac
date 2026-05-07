@@ -75,7 +75,7 @@ export default function ReadingLayout({ story, chapter, prevChapter, nextChapter
 
       {/* Content */}
       <article className="max-w-3xl mx-auto px-5 md:px-8 py-10">
-        <div className={`${current.value} ${current.lineHeight} text-amber-950/90 font-serif`}>
+        <div className={`${current.value} ${current.lineHeight} text-amber-950/90 font-sans`}>
           {children}
         </div>
       </article>
