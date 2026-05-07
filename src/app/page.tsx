@@ -51,14 +51,24 @@ export default async function HomePage() {
           <p className="text-amber-300/70 max-w-xl mx-auto mb-10 text-sm leading-relaxed">
             Nơi những câu chuyện tiên hiệp, đô thị, ngôn tình được viết ra từ trái tim — dành cho bạn đọc đam mê truyện chữ.
           </p>
-          <div className="flex flex-wrap gap-3 justify-center">
+          <div className="flex flex-col items-stretch gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-center">
             <Link href="/stories"
-              className="bg-white text-amber-900 px-8 py-3 rounded-full font-semibold hover:bg-amber-50 transition-colors shadow-lg">
+              className="w-full sm:w-auto bg-white text-amber-900 px-8 py-3 rounded-full font-semibold hover:bg-amber-50 transition-colors shadow-lg text-center">
               Đọc truyện ngay
             </Link>
             <Link href="#latest"
-              className="border border-white/40 text-white px-8 py-3 rounded-full font-medium hover:bg-white/10 transition-colors">
+              className="w-full sm:w-auto border border-white/40 text-white px-8 py-3 rounded-full font-medium hover:bg-white/10 transition-colors text-center">
               Truyện mới cập nhật
+            </Link>
+            <Link href="/hoc-tieng-trung/bai-hoc"
+              className="w-full sm:w-auto bg-amber-300 text-amber-950 px-8 py-3 rounded-full font-bold shadow-xl shadow-amber-950/25 ring-2 ring-white/25 hover:bg-amber-200 hover:shadow-2xl active:scale-[0.98] transition-all text-center">
+              <span className="inline-flex items-center justify-center gap-2">
+                <span aria-hidden="true">🇨🇳</span>
+                <span>Học tiếng Trung</span>
+                <span className="rounded-full bg-amber-950/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-amber-950/80">
+                  Mới
+                </span>
+              </span>
             </Link>
           </div>
         </div>
