@@ -1,15 +1,11 @@
 import { Metadata } from 'next'
-import PublicApp from '@/components/hoctientrung/PublicApp'
+import ChineseLearningHome from '@/components/chinese-learning/ChineseLearningHome'
 
 export const metadata: Metadata = {
-  title: 'Học Tiếng Trung – Gác Truyện',
-  description: 'Ôn từ vựng tiếng Trung bằng flashcard. Lưu từ mới ngay khi đọc truyện.',
+  title: 'Tiếng Trung Mỗi Ngày – Gác Truyện',
+  description: 'Học qua gia đình, bữa ăn, bạn bè và những cuộc trò chuyện thật.',
 }
 
 export default function HocTiengTrungPage() {
-  return (
-    <div className="min-h-screen bg-[#F8F5EF]">
-      <PublicApp />
-    </div>
-  )
+  return <ChineseLearningHome />
 }

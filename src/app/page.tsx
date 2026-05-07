@@ -67,7 +67,7 @@ export default async function HomePage() {
               className="flex-[1.15] sm:flex-none bg-white text-amber-900 px-5 sm:px-8 py-2.5 sm:py-3 rounded-full text-sm sm:text-base font-semibold hover:bg-amber-50 transition-colors shadow-lg text-center whitespace-nowrap">
               Đọc truyện ngay
             </Link>
-            <Link href="/hoc-tieng-trung/bai-hoc"
+            <Link href="/hoc-tieng-trung"
               className="flex-1 sm:flex-none bg-amber-200/95 text-amber-950 px-3.5 sm:px-4 py-2.5 sm:py-3 rounded-full text-sm font-semibold shadow-sm ring-1 ring-white/25 hover:bg-amber-100 active:scale-[0.98] transition-all text-center whitespace-nowrap">
               <span className="inline-flex items-center justify-center gap-1 sm:gap-1.5">
                 <span aria-hidden="true">🇨🇳</span>

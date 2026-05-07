@@ -1,24 +1,14 @@
-import { Metadata } from 'next'
-import { getLessonBySlug, LESSONS } from '@/components/hoctientrung/lessonData'
-import LessonDetail from '@/components/hoctientrung/LessonDetail'
+import { redirect } from 'next/navigation'
+import { CHINESE_LESSONS, getChineseLessonBySlug } from '@/data/chineseLessons'
 
 type Props = { params: Promise<{ slug: string }> }
 
 export async function generateStaticParams() {
-  return LESSONS.map(l => ({ slug: l.slug }))
-}
-
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug } = await params
-  const lesson = getLessonBySlug(slug)
-  if (!lesson) return { title: 'Không tìm thấy bài học' }
-  return {
-    title: `Ngày ${lesson.day}: ${lesson.title} – Học Tiếng Trung`,
-    description: lesson.goal,
-  }
+  return CHINESE_LESSONS.map(lesson => ({ slug: lesson.slug }))
 }
 
 export default async function LessonPage({ params }: Props) {
   const { slug } = await params
-  return <LessonDetail slug={slug} />
+  const lesson = getChineseLessonBySlug(slug)
+  redirect(lesson ? `/hoc-tieng-trung/${lesson.slug}` : '/hoc-tieng-trung')
 }
