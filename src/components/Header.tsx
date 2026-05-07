@@ -27,6 +27,9 @@ export default function Header() {
           <Link href="/audio" className="text-amber-800 hover:text-amber-950 transition-colors text-sm font-medium">
             🎧 Audio
           </Link>
+          <Link href="/hoc-tieng-trung" className="text-amber-800 hover:text-amber-950 transition-colors text-sm font-medium">
+            🀄 Học Tiếng Trung
+          </Link>
           <Link
             href="/membership"
             className="bg-amber-700 text-white px-4 py-1.5 rounded-full text-sm font-medium hover:bg-amber-800 transition-colors"
@@ -56,6 +59,9 @@ export default function Header() {
           </Link>
           <Link href="/audio" className="block text-amber-800 hover:text-amber-950 text-sm font-medium py-1" onClick={() => setMenuOpen(false)}>
             🎧 Audio
+          </Link>
+          <Link href="/hoc-tieng-trung" className="block text-amber-800 hover:text-amber-950 text-sm font-medium py-1" onClick={() => setMenuOpen(false)}>
+            🀄 Học Tiếng Trung
           </Link>
           <Link href="/membership" className="block text-amber-800 hover:text-amber-950 text-sm font-medium py-1" onClick={() => setMenuOpen(false)}>
             👑 Hội viên

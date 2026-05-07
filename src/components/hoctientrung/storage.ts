@@ -18,6 +18,11 @@ export interface Word {
 export interface ProgressEntry {
   status: 'remembered' | 'not_yet'
   reviewedAt: string
+  // SRS fields
+  interval?: number
+  repetitions?: number
+  easeFactor?: number
+  nextReview?: string
 }
 
 export type ProgressMap = Record<string, ProgressEntry> // wordId → entry

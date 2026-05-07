@@ -1,0 +1,193 @@
+// HSK 1 — 150 từ chuẩn, kèm pinyin có số thanh và nghĩa tiếng Việt
+// tone: 1=ngang, 2=sắc, 3=hỏi, 4=nặng, 0=nhẹ
+
+export interface HSKWord {
+  chinese: string
+  pinyin: string       // có số thanh: nǐ hǎo
+  pinyinNum: string    // có số: ni3 hao3
+  meaning: string
+  tone: number         // thanh của âm tiết đầu
+  tags: string[]
+}
+
+export const HSK1: HSKWord[] = [
+  // Đại từ
+  { chinese:'我', pinyin:'wǒ', pinyinNum:'wo3', meaning:'Tôi / Mình', tone:3, tags:['đại từ'] },
+  { chinese:'你', pinyin:'nǐ', pinyinNum:'ni3', meaning:'Bạn / Anh / Em (số ít)', tone:3, tags:['đại từ'] },
+  { chinese:'他', pinyin:'tā', pinyinNum:'ta1', meaning:'Anh ấy / Ông ấy', tone:1, tags:['đại từ'] },
+  { chinese:'她', pinyin:'tā', pinyinNum:'ta1', meaning:'Cô ấy / Bà ấy', tone:1, tags:['đại từ'] },
+  { chinese:'我们', pinyin:'wǒmen', pinyinNum:'wo3men', meaning:'Chúng tôi / Chúng ta', tone:3, tags:['đại từ'] },
+  { chinese:'你们', pinyin:'nǐmen', pinyinNum:'ni3men', meaning:'Các bạn', tone:3, tags:['đại từ'] },
+  { chinese:'他们', pinyin:'tāmen', pinyinNum:'ta1men', meaning:'Họ (nam hoặc hỗn hợp)', tone:1, tags:['đại từ'] },
+  { chinese:'她们', pinyin:'tāmen', pinyinNum:'ta1men', meaning:'Họ (toàn nữ)', tone:1, tags:['đại từ'] },
+  { chinese:'这', pinyin:'zhè', pinyinNum:'zhe4', meaning:'Đây / Cái này', tone:4, tags:['đại từ'] },
+  { chinese:'那', pinyin:'nà', pinyinNum:'na4', meaning:'Đó / Kia / Cái đó', tone:4, tags:['đại từ'] },
+  { chinese:'哪', pinyin:'nǎ', pinyinNum:'na3', meaning:'Nào / Đâu', tone:3, tags:['đại từ'] },
+  { chinese:'哪儿', pinyin:'nǎr', pinyinNum:'na3r', meaning:'Ở đâu', tone:3, tags:['đại từ'] },
+  { chinese:'谁', pinyin:'shéi', pinyinNum:'shei2', meaning:'Ai', tone:2, tags:['đại từ'] },
+  { chinese:'什么', pinyin:'shénme', pinyinNum:'shen2me', meaning:'Cái gì / Gì', tone:2, tags:['đại từ'] },
+  { chinese:'多少', pinyin:'duōshǎo', pinyinNum:'duo1shao3', meaning:'Bao nhiêu', tone:1, tags:['đại từ'] },
+  { chinese:'几', pinyin:'jǐ', pinyinNum:'ji3', meaning:'Mấy (số nhỏ < 10)', tone:3, tags:['đại từ'] },
+  // Gia đình
+  { chinese:'爸爸', pinyin:'bàba', pinyinNum:'ba4ba', meaning:'Bố / Ba', tone:4, tags:['gia đình'] },
+  { chinese:'妈妈', pinyin:'māma', pinyinNum:'ma1ma', meaning:'Mẹ / Má', tone:1, tags:['gia đình'] },
+  { chinese:'儿子', pinyin:'érzi', pinyinNum:'er2zi', meaning:'Con trai', tone:2, tags:['gia đình'] },
+  { chinese:'女儿', pinyin:'nǚér', pinyinNum:'nv3er2', meaning:'Con gái', tone:3, tags:['gia đình'] },
+  { chinese:'朋友', pinyin:'péngyou', pinyinNum:'peng2you', meaning:'Bạn bè', tone:2, tags:['gia đình'] },
+  { chinese:'先生', pinyin:'xiānsheng', pinyinNum:'xian1sheng', meaning:'Ông / Chồng / Thầy', tone:1, tags:['gia đình'] },
+  { chinese:'小姐', pinyin:'xiǎojiě', pinyinNum:'xiao3jie3', meaning:'Cô (gái trẻ)', tone:3, tags:['gia đình'] },
+  { chinese:'同学', pinyin:'tóngxué', pinyinNum:'tong2xue2', meaning:'Bạn học', tone:2, tags:['gia đình'] },
+  { chinese:'老师', pinyin:'lǎoshī', pinyinNum:'lao3shi1', meaning:'Thầy / Cô giáo', tone:3, tags:['nghề nghiệp'] },
+  { chinese:'医生', pinyin:'yīshēng', pinyinNum:'yi1sheng1', meaning:'Bác sĩ', tone:1, tags:['nghề nghiệp'] },
+  { chinese:'学生', pinyin:'xuésheng', pinyinNum:'xue2sheng', meaning:'Học sinh / Sinh viên', tone:2, tags:['nghề nghiệp'] },
+  // Số đếm
+  { chinese:'一', pinyin:'yī', pinyinNum:'yi1', meaning:'Một (1)', tone:1, tags:['số đếm'] },
+  { chinese:'二', pinyin:'èr', pinyinNum:'er4', meaning:'Hai (2)', tone:4, tags:['số đếm'] },
+  { chinese:'三', pinyin:'sān', pinyinNum:'san1', meaning:'Ba (3)', tone:1, tags:['số đếm'] },
+  { chinese:'四', pinyin:'sì', pinyinNum:'si4', meaning:'Bốn (4)', tone:4, tags:['số đếm'] },
+  { chinese:'五', pinyin:'wǔ', pinyinNum:'wu3', meaning:'Năm (5)', tone:3, tags:['số đếm'] },
+  { chinese:'六', pinyin:'liù', pinyinNum:'liu4', meaning:'Sáu (6)', tone:4, tags:['số đếm'] },
+  { chinese:'七', pinyin:'qī', pinyinNum:'qi1', meaning:'Bảy (7)', tone:1, tags:['số đếm'] },
+  { chinese:'八', pinyin:'bā', pinyinNum:'ba1', meaning:'Tám (8)', tone:1, tags:['số đếm'] },
+  { chinese:'九', pinyin:'jiǔ', pinyinNum:'jiu3', meaning:'Chín (9)', tone:3, tags:['số đếm'] },
+  { chinese:'十', pinyin:'shí', pinyinNum:'shi2', meaning:'Mười (10)', tone:2, tags:['số đếm'] },
+  { chinese:'零', pinyin:'líng', pinyinNum:'ling2', meaning:'Không (0)', tone:2, tags:['số đếm'] },
+  { chinese:'两', pinyin:'liǎng', pinyinNum:'liang3', meaning:'Hai (dùng với danh từ)', tone:3, tags:['số đếm'] },
+  { chinese:'百', pinyin:'bǎi', pinyinNum:'bai3', meaning:'Trăm', tone:3, tags:['số đếm'] },
+  // Thời gian
+  { chinese:'今天', pinyin:'jīntiān', pinyinNum:'jin1tian1', meaning:'Hôm nay', tone:1, tags:['thời gian'] },
+  { chinese:'明天', pinyin:'míngtiān', pinyinNum:'ming2tian1', meaning:'Ngày mai', tone:2, tags:['thời gian'] },
+  { chinese:'昨天', pinyin:'zuótiān', pinyinNum:'zuo2tian1', meaning:'Hôm qua', tone:2, tags:['thời gian'] },
+  { chinese:'年', pinyin:'nián', pinyinNum:'nian2', meaning:'Năm', tone:2, tags:['thời gian'] },
+  { chinese:'月', pinyin:'yuè', pinyinNum:'yue4', meaning:'Tháng', tone:4, tags:['thời gian'] },
+  { chinese:'号', pinyin:'hào', pinyinNum:'hao4', meaning:'Ngày (trong tháng)', tone:4, tags:['thời gian'] },
+  { chinese:'星期', pinyin:'xīngqī', pinyinNum:'xing1qi1', meaning:'Tuần / Thứ', tone:1, tags:['thời gian'] },
+  { chinese:'时候', pinyin:'shíhou', pinyinNum:'shi2hou', meaning:'Lúc / Khi', tone:2, tags:['thời gian'] },
+  { chinese:'现在', pinyin:'xiànzài', pinyinNum:'xian4zai4', meaning:'Bây giờ', tone:4, tags:['thời gian'] },
+  { chinese:'上午', pinyin:'shàngwǔ', pinyinNum:'shang4wu3', meaning:'Buổi sáng', tone:4, tags:['thời gian'] },
+  { chinese:'下午', pinyin:'xiàwǔ', pinyinNum:'xia4wu3', meaning:'Buổi chiều', tone:4, tags:['thời gian'] },
+  { chinese:'中午', pinyin:'zhōngwǔ', pinyinNum:'zhong1wu3', meaning:'Buổi trưa', tone:1, tags:['thời gian'] },
+  { chinese:'分钟', pinyin:'fēnzhōng', pinyinNum:'fen1zhong1', meaning:'Phút', tone:1, tags:['thời gian'] },
+  { chinese:'岁', pinyin:'suì', pinyinNum:'sui4', meaning:'Tuổi', tone:4, tags:['thời gian'] },
+  // Địa điểm
+  { chinese:'中国', pinyin:'Zhōngguó', pinyinNum:'zhong1guo2', meaning:'Trung Quốc', tone:1, tags:['địa danh'] },
+  { chinese:'北京', pinyin:'Běijīng', pinyinNum:'bei3jing1', meaning:'Bắc Kinh', tone:3, tags:['địa danh'] },
+  { chinese:'上', pinyin:'shàng', pinyinNum:'shang4', meaning:'Trên / Lên', tone:4, tags:['địa điểm'] },
+  { chinese:'下', pinyin:'xià', pinyinNum:'xia4', meaning:'Dưới / Xuống', tone:4, tags:['địa điểm'] },
+  { chinese:'里', pinyin:'lǐ', pinyinNum:'li3', meaning:'Trong / Bên trong', tone:3, tags:['địa điểm'] },
+  { chinese:'前面', pinyin:'qiánmian', pinyinNum:'qian2mian', meaning:'Phía trước', tone:2, tags:['địa điểm'] },
+  { chinese:'后面', pinyin:'hòumian', pinyinNum:'hou4mian', meaning:'Phía sau', tone:4, tags:['địa điểm'] },
+  { chinese:'医院', pinyin:'yīyuàn', pinyinNum:'yi1yuan4', meaning:'Bệnh viện', tone:1, tags:['địa điểm'] },
+  { chinese:'学校', pinyin:'xuéxiào', pinyinNum:'xue2xiao4', meaning:'Trường học', tone:2, tags:['địa điểm'] },
+  { chinese:'商店', pinyin:'shāngdiàn', pinyinNum:'shang1dian4', meaning:'Cửa hàng', tone:1, tags:['địa điểm'] },
+  { chinese:'饭店', pinyin:'fàndiàn', pinyinNum:'fan4dian4', meaning:'Nhà hàng / Khách sạn', tone:4, tags:['địa điểm'] },
+  { chinese:'火车站', pinyin:'huǒchēzhàn', pinyinNum:'huo3che1zhan4', meaning:'Ga tàu hỏa', tone:3, tags:['địa điểm'] },
+  // Động từ thường dùng
+  { chinese:'是', pinyin:'shì', pinyinNum:'shi4', meaning:'Là', tone:4, tags:['động từ'] },
+  { chinese:'有', pinyin:'yǒu', pinyinNum:'you3', meaning:'Có', tone:3, tags:['động từ'] },
+  { chinese:'在', pinyin:'zài', pinyinNum:'zai4', meaning:'Ở / Đang', tone:4, tags:['động từ'] },
+  { chinese:'来', pinyin:'lái', pinyinNum:'lai2', meaning:'Đến / Lại', tone:2, tags:['động từ'] },
+  { chinese:'去', pinyin:'qù', pinyinNum:'qu4', meaning:'Đi / Đến', tone:4, tags:['động từ'] },
+  { chinese:'回', pinyin:'huí', pinyinNum:'hui2', meaning:'Về / Quay lại', tone:2, tags:['động từ'] },
+  { chinese:'开', pinyin:'kāi', pinyinNum:'kai1', meaning:'Mở / Lái', tone:1, tags:['động từ'] },
+  { chinese:'说', pinyin:'shuō', pinyinNum:'shuo1', meaning:'Nói', tone:1, tags:['động từ'] },
+  { chinese:'听', pinyin:'tīng', pinyinNum:'ting1', meaning:'Nghe', tone:1, tags:['động từ'] },
+  { chinese:'看', pinyin:'kàn', pinyinNum:'kan4', meaning:'Xem / Nhìn', tone:4, tags:['động từ'] },
+  { chinese:'看见', pinyin:'kànjiàn', pinyinNum:'kan4jian4', meaning:'Nhìn thấy', tone:4, tags:['động từ'] },
+  { chinese:'读', pinyin:'dú', pinyinNum:'du2', meaning:'Đọc', tone:2, tags:['động từ'] },
+  { chinese:'写', pinyin:'xiě', pinyinNum:'xie3', meaning:'Viết', tone:3, tags:['động từ'] },
+  { chinese:'吃', pinyin:'chī', pinyinNum:'chi1', meaning:'Ăn', tone:1, tags:['động từ'] },
+  { chinese:'喝', pinyin:'hē', pinyinNum:'he1', meaning:'Uống', tone:1, tags:['động từ'] },
+  { chinese:'买', pinyin:'mǎi', pinyinNum:'mai3', meaning:'Mua', tone:3, tags:['động từ'] },
+  { chinese:'睡觉', pinyin:'shuìjiào', pinyinNum:'shui4jiao4', meaning:'Ngủ', tone:4, tags:['động từ'] },
+  { chinese:'学习', pinyin:'xuéxí', pinyinNum:'xue2xi2', meaning:'Học tập', tone:2, tags:['động từ'] },
+  { chinese:'工作', pinyin:'gōngzuò', pinyinNum:'gong1zuo4', meaning:'Làm việc', tone:1, tags:['động từ'] },
+  { chinese:'认识', pinyin:'rènshi', pinyinNum:'ren4shi', meaning:'Nhận ra / Quen biết', tone:4, tags:['động từ'] },
+  { chinese:'住', pinyin:'zhù', pinyinNum:'zhu4', meaning:'Sống / Ở', tone:4, tags:['động từ'] },
+  { chinese:'叫', pinyin:'jiào', pinyinNum:'jiao4', meaning:'Tên là / Gọi là', tone:4, tags:['động từ'] },
+  { chinese:'想', pinyin:'xiǎng', pinyinNum:'xiang3', meaning:'Muốn / Nghĩ', tone:3, tags:['động từ'] },
+  { chinese:'会', pinyin:'huì', pinyinNum:'hui4', meaning:'Có thể / Biết làm', tone:4, tags:['động từ'] },
+  { chinese:'能', pinyin:'néng', pinyinNum:'neng2', meaning:'Có thể / Được phép', tone:2, tags:['động từ'] },
+  { chinese:'请', pinyin:'qǐng', pinyinNum:'qing3', meaning:'Mời / Xin', tone:3, tags:['động từ'] },
+  { chinese:'打电话', pinyin:'dǎ diànhuà', pinyinNum:'da3 dian4hua4', meaning:'Gọi điện thoại', tone:3, tags:['động từ'] },
+  // Tính từ
+  { chinese:'好', pinyin:'hǎo', pinyinNum:'hao3', meaning:'Tốt / Được', tone:3, tags:['tính từ'] },
+  { chinese:'大', pinyin:'dà', pinyinNum:'da4', meaning:'To / Lớn', tone:4, tags:['tính từ'] },
+  { chinese:'小', pinyin:'xiǎo', pinyinNum:'xiao3', meaning:'Nhỏ / Bé', tone:3, tags:['tính từ'] },
+  { chinese:'多', pinyin:'duō', pinyinNum:'duo1', meaning:'Nhiều', tone:1, tags:['tính từ'] },
+  { chinese:'少', pinyin:'shǎo', pinyinNum:'shao3', meaning:'Ít', tone:3, tags:['tính từ'] },
+  { chinese:'冷', pinyin:'lěng', pinyinNum:'leng3', meaning:'Lạnh', tone:3, tags:['tính từ'] },
+  { chinese:'热', pinyin:'rè', pinyinNum:'re4', meaning:'Nóng', tone:4, tags:['tính từ'] },
+  { chinese:'漂亮', pinyin:'piàoliang', pinyinNum:'piao4liang', meaning:'Đẹp', tone:4, tags:['tính từ'] },
+  { chinese:'高兴', pinyin:'gāoxìng', pinyinNum:'gao1xing4', meaning:'Vui / Hạnh phúc', tone:1, tags:['tính từ'] },
+  { chinese:'太', pinyin:'tài', pinyinNum:'tai4', meaning:'Quá / Rất', tone:4, tags:['tính từ'] },
+  { chinese:'很', pinyin:'hěn', pinyinNum:'hen3', meaning:'Rất', tone:3, tags:['tính từ'] },
+  // Đồ vật
+  { chinese:'书', pinyin:'shū', pinyinNum:'shu1', meaning:'Sách', tone:1, tags:['đồ vật'] },
+  { chinese:'本', pinyin:'běn', pinyinNum:'ben3', meaning:'Quyển (lượng từ cho sách)', tone:3, tags:['đồ vật'] },
+  { chinese:'电脑', pinyin:'diànnǎo', pinyinNum:'dian4nao3', meaning:'Máy tính', tone:4, tags:['đồ vật'] },
+  { chinese:'电视', pinyin:'diànshì', pinyinNum:'dian4shi4', meaning:'Tivi', tone:4, tags:['đồ vật'] },
+  { chinese:'电影', pinyin:'diànyǐng', pinyinNum:'dian4ying3', meaning:'Phim (điện ảnh)', tone:4, tags:['đồ vật'] },
+  { chinese:'手机', pinyin:'shǒujī', pinyinNum:'shou3ji1', meaning:'Điện thoại di động', tone:3, tags:['đồ vật'] },
+  { chinese:'杯子', pinyin:'bēizi', pinyinNum:'bei1zi', meaning:'Cái cốc / Ly', tone:1, tags:['đồ vật'] },
+  { chinese:'椅子', pinyin:'yǐzi', pinyinNum:'yi3zi', meaning:'Ghế', tone:3, tags:['đồ vật'] },
+  { chinese:'桌子', pinyin:'zhuōzi', pinyinNum:'zhuo1zi', meaning:'Bàn', tone:1, tags:['đồ vật'] },
+  { chinese:'衣服', pinyin:'yīfu', pinyinNum:'yi1fu', meaning:'Quần áo', tone:1, tags:['đồ vật'] },
+  { chinese:'钱', pinyin:'qián', pinyinNum:'qian2', meaning:'Tiền', tone:2, tags:['đồ vật'] },
+  { chinese:'块', pinyin:'kuài', pinyinNum:'kuai4', meaning:'Đồng (đơn vị tiền)', tone:4, tags:['đồ vật'] },
+  { chinese:'路', pinyin:'lù', pinyinNum:'lu4', meaning:'Đường / Con đường', tone:4, tags:['đồ vật'] },
+  // Thức ăn & đồ uống
+  { chinese:'饭', pinyin:'fàn', pinyinNum:'fan4', meaning:'Cơm / Bữa ăn', tone:4, tags:['thức ăn'] },
+  { chinese:'菜', pinyin:'cài', pinyinNum:'cai4', meaning:'Rau / Món ăn', tone:4, tags:['thức ăn'] },
+  { chinese:'水', pinyin:'shuǐ', pinyinNum:'shui3', meaning:'Nước', tone:3, tags:['thức ăn'] },
+  { chinese:'茶', pinyin:'chá', pinyinNum:'cha2', meaning:'Trà', tone:2, tags:['thức ăn'] },
+  { chinese:'水果', pinyin:'shuǐguǒ', pinyinNum:'shui3guo3', meaning:'Hoa quả', tone:3, tags:['thức ăn'] },
+  { chinese:'苹果', pinyin:'píngguǒ', pinyinNum:'ping2guo3', meaning:'Táo', tone:2, tags:['thức ăn'] },
+  { chinese:'西瓜', pinyin:'xīguā', pinyinNum:'xi1gua1', meaning:'Dưa hấu', tone:1, tags:['thức ăn'] },
+  // Phương tiện
+  { chinese:'出租车', pinyin:'chūzūchē', pinyinNum:'chu1zu1che1', meaning:'Taxi', tone:1, tags:['phương tiện'] },
+  { chinese:'飞机', pinyin:'fēijī', pinyinNum:'fei1ji1', meaning:'Máy bay', tone:1, tags:['phương tiện'] },
+  // Động vật
+  { chinese:'猫', pinyin:'māo', pinyinNum:'mao1', meaning:'Mèo', tone:1, tags:['động vật'] },
+  { chinese:'狗', pinyin:'gǒu', pinyinNum:'gou3', meaning:'Chó', tone:3, tags:['động vật'] },
+  // Ngôn ngữ / học tập
+  { chinese:'汉语', pinyin:'Hànyǔ', pinyinNum:'han4yu3', meaning:'Tiếng Hán / Tiếng Trung', tone:4, tags:['ngôn ngữ'] },
+  { chinese:'字', pinyin:'zì', pinyinNum:'zi4', meaning:'Chữ / Ký tự', tone:4, tags:['ngôn ngữ'] },
+  // Giao tiếp cơ bản
+  { chinese:'你好', pinyin:'nǐhǎo', pinyinNum:'ni3hao3', meaning:'Xin chào', tone:3, tags:['giao tiếp'] },
+  { chinese:'谢谢', pinyin:'xièxie', pinyinNum:'xie4xie', meaning:'Cảm ơn', tone:4, tags:['giao tiếp'] },
+  { chinese:'再见', pinyin:'zàijiàn', pinyinNum:'zai4jian4', meaning:'Tạm biệt', tone:4, tags:['giao tiếp'] },
+  { chinese:'对不起', pinyin:'duìbuqǐ', pinyinNum:'dui4bu3qi3', meaning:'Xin lỗi', tone:4, tags:['giao tiếp'] },
+  { chinese:'没关系', pinyin:'méiguānxi', pinyinNum:'mei2guan1xi', meaning:'Không sao', tone:2, tags:['giao tiếp'] },
+  { chinese:'不客气', pinyin:'bùkèqi', pinyinNum:'bu4ke4qi', meaning:'Không có gì / Đừng khách sáo', tone:4, tags:['giao tiếp'] },
+  { chinese:'喂', pinyin:'wèi', pinyinNum:'wei4', meaning:'A-lô (nghe điện thoại)', tone:4, tags:['giao tiếp'] },
+  // Từ hư
+  { chinese:'不', pinyin:'bù', pinyinNum:'bu4', meaning:'Không (phủ định)', tone:4, tags:['từ hư'] },
+  { chinese:'没有', pinyin:'méiyǒu', pinyinNum:'mei2you3', meaning:'Không có', tone:2, tags:['từ hư'] },
+  { chinese:'的', pinyin:'de', pinyinNum:'de', meaning:'Trợ từ sở hữu (của)', tone:0, tags:['từ hư'] },
+  { chinese:'了', pinyin:'le', pinyinNum:'le', meaning:'Trợ từ hoàn thành', tone:0, tags:['từ hư'] },
+  { chinese:'吗', pinyin:'ma', pinyinNum:'ma', meaning:'Trợ từ câu hỏi', tone:0, tags:['từ hư'] },
+  { chinese:'呢', pinyin:'ne', pinyinNum:'ne', meaning:'Trợ từ hỏi nhẹ / Còn...thì sao', tone:0, tags:['từ hư'] },
+  { chinese:'都', pinyin:'dōu', pinyinNum:'dou1', meaning:'Đều / Tất cả', tone:1, tags:['từ hư'] },
+  { chinese:'也', pinyin:'yě', pinyinNum:'ye3', meaning:'Cũng', tone:3, tags:['từ hư'] },
+  { chinese:'和', pinyin:'hé', pinyinNum:'he2', meaning:'Và / Cùng với', tone:2, tags:['từ hư'] },
+  { chinese:'因为', pinyin:'yīnwèi', pinyinNum:'yin1wei4', meaning:'Vì / Bởi vì', tone:1, tags:['từ hư'] },
+  { chinese:'些', pinyin:'xiē', pinyinNum:'xie1', meaning:'Một số / Vài', tone:1, tags:['từ hư'] },
+  // Các từ còn lại
+  { chinese:'天气', pinyin:'tiānqì', pinyinNum:'tian1qi4', meaning:'Thời tiết', tone:1, tags:['thiên nhiên'] },
+  { chinese:'下雨', pinyin:'xià yǔ', pinyinNum:'xia4 yu3', meaning:'Mưa (trời mưa)', tone:4, tags:['thiên nhiên'] },
+  { chinese:'东西', pinyin:'dōngxi', pinyinNum:'dong1xi', meaning:'Đồ vật / Thứ gì đó', tone:1, tags:['đồ vật'] },
+  { chinese:'个', pinyin:'gè', pinyinNum:'ge4', meaning:'Cái (lượng từ chung)', tone:4, tags:['từ hư'] },
+  { chinese:'人', pinyin:'rén', pinyinNum:'ren2', meaning:'Người', tone:2, tags:['danh từ'] },
+  { chinese:'生日', pinyin:'shēngrì', pinyinNum:'sheng1ri4', meaning:'Sinh nhật', tone:1, tags:['thời gian'] },
+  { chinese:'一点儿', pinyin:'yīdiǎnr', pinyinNum:'yi1dian3r', meaning:'Một chút', tone:1, tags:['từ hư'] },
+  { chinese:'点', pinyin:'diǎn', pinyinNum:'dian3', meaning:'Điểm / Giờ (đồng hồ)', tone:3, tags:['thời gian'] },
+]
+
+export function getHSK1Tags(): string[] {
+  return [...new Set(HSK1.flatMap(w => w.tags))].sort()
+}
+
+export function getHSK1ByTag(tag: string): HSKWord[] {
+  return HSK1.filter(w => w.tags.includes(tag))
+}

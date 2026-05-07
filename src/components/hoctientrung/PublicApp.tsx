@@ -1,18 +1,30 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect } from 'react'
 import {
-  getVocabulary, saveVocabulary, addWordToScope, deleteWordFromScope,
-  getProgress, markWord as markWordInStorage, ProgressMap,
-  getPublicNickname, setPublicNickname, Word, todayStr
+  getVocabulary, addWordToScope, deleteWordFromScope,
+  getProgress, ProgressMap,
+  getPublicNickname, setPublicNickname, Word
 } from './storage'
+import { isDue } from './srs'
+import { HSK1 } from './hskData'
 import Flashcard from './Flashcard'
 import WordList from './WordList'
 import WordForm from './WordForm'
+import ListeningMode from './ListeningMode'
+import SpeakingMode from './SpeakingMode'
 
-type Tab = 'flashcard' | 'wordlist' | 'addword'
+type Tab = 'flashcard' | 'listen' | 'speak' | 'wordlist' | 'addword'
 
 function getScope(nickname: string) { return `public_${nickname}` }
+
+function hsk1AsWords(): Word[] {
+  return HSK1.map((w, i) => ({
+    id: `hsk1_${i}`,
+    chinese: w.chinese, pinyin: w.pinyin, meaning: w.meaning,
+    example: '', tags: w.tags, addedBy: 'hsk1', addedAt: '2026-01-01',
+  } as Word))
+}
 
 export default function PublicApp() {
   const [nickname, setNickname]   = useState<string | null>(null)
@@ -20,7 +32,6 @@ export default function PublicApp() {
   const [tab, setTab]             = useState<Tab>('flashcard')
   const [vocabulary, setVoc]      = useState<Word[]>([])
   const [progress, setProgress]   = useState<ProgressMap>({})
-  const [tick, setTick]           = useState(0)
 
   useEffect(() => {
     const saved = getPublicNickname()
@@ -54,20 +65,22 @@ export default function PublicApp() {
   }
 
   function handleProgressUpdate() {
-    if (!nickname) return
-    setProgress(getProgress(getScope(nickname), nickname))
-    setTick(t => t + 1)
+    if (nickname) setProgress(getProgress(getScope(nickname), nickname))
   }
 
-  const allTags = [...new Set(vocabulary.flatMap(w => w.tags || []))].sort()
+  const allTags  = [...new Set(vocabulary.flatMap(w => w.tags || []))].sort()
+  const activeVoc = vocabulary.length >= 4 ? vocabulary : hsk1AsWords()
+  const dueWords  = activeVoc.filter(w => isDue(progress[w.id] as any))
 
-  // --- Nickname prompt ---
+  // Nickname prompt
   if (!nickname) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] px-6">
         <div className="text-5xl mb-4">🀄</div>
         <h2 className="text-xl font-bold text-amber-950 mb-2">Học Tiếng Trung</h2>
-        <p className="text-amber-800/60 text-sm mb-6 text-center">Nhập tên hoặc nickname của bạn để bắt đầu. Dữ liệu lưu trên trình duyệt này.</p>
+        <p className="text-amber-800/60 text-sm mb-6 text-center max-w-xs">
+          Nhập tên của bạn để bắt đầu. Dữ liệu lưu trong trình duyệt này, miễn phí, không cần tài khoản.
+        </p>
         <form onSubmit={handleSetNickname} className="w-full max-w-xs flex flex-col gap-3">
           <input value={nameInput} onChange={e => setNameInput(e.target.value)}
             placeholder="Tên của bạn..." autoFocus
@@ -77,17 +90,29 @@ export default function PublicApp() {
             Bắt đầu →
           </button>
         </form>
+        <p className="text-xs text-amber-800/30 mt-4">Hoặc dùng ngay với 150 từ HSK 1 có sẵn</p>
       </div>
     )
   }
 
+  const TABS: { id: Tab; emoji: string; label: string }[] = [
+    { id: 'flashcard', emoji: '🃏', label: 'Ôn SRS' },
+    { id: 'listen',    emoji: '🎧', label: 'Nghe' },
+    { id: 'speak',     emoji: '🎤', label: 'Nói' },
+    { id: 'wordlist',  emoji: '📖', label: 'Từ vựng' },
+    { id: 'addword',   emoji: '➕', label: 'Thêm' },
+  ]
+
   return (
     <div className="max-w-lg mx-auto min-h-screen bg-[#F8F5EF]">
       {/* Header */}
-      <div className="px-4 pt-5 pb-3 flex items-center justify-between">
+      <div className="px-4 pt-5 pb-3 flex items-center justify-between bg-[#FFFDF8] border-b border-[#E5E0D8]">
         <div>
-          <h1 className="text-lg font-bold text-amber-950">Học Tiếng Trung</h1>
-          <p className="text-xs text-amber-800/50">Xin chào, {nickname} · {vocabulary.length} từ</p>
+          <h1 className="text-base font-bold text-amber-950">🀄 Học Tiếng Trung</h1>
+          <p className="text-xs text-amber-800/50">
+            {nickname} · {vocabulary.length} từ của tôi
+            {dueWords.length > 0 && <span className="text-amber-600 font-semibold"> · {dueWords.length} từ đến hạn</span>}
+          </p>
         </div>
         <button onClick={() => { setPublicNickname(''); setNickname(null) }}
           className="text-xs text-amber-800/40 hover:text-amber-800 border border-[#E5E0D8] rounded-lg px-3 py-1.5">
@@ -96,19 +121,35 @@ export default function PublicApp() {
       </div>
 
       {/* Tab nav */}
-      <div className="flex border-b border-[#E5E0D8] bg-[#FFFDF8] mx-4 rounded-xl overflow-hidden mb-4">
-        {(['flashcard', 'wordlist', 'addword'] as Tab[]).map(t => (
-          <button key={t} onClick={() => setTab(t)}
-            className={`flex-1 py-2.5 text-sm font-medium transition-colors ${tab === t ? 'bg-amber-700 text-white' : 'text-amber-800/60 hover:text-amber-800'}`}>
-            {t === 'flashcard' ? '🃏 Ôn bài' : t === 'wordlist' ? '📖 Từ vựng' : '➕ Thêm'}
+      <div className="flex bg-[#FFFDF8] border-b border-[#E5E0D8]">
+        {TABS.map(t => (
+          <button key={t.id} onClick={() => setTab(t.id)}
+            className={`flex-1 flex flex-col items-center py-2.5 text-xs font-medium transition-colors ${tab === t.id ? 'text-amber-700 border-b-2 border-amber-700' : 'text-amber-800/40 hover:text-amber-800/70'}`}>
+            <span className="text-lg mb-0.5">{t.emoji}</span>
+            {t.label}
           </button>
         ))}
       </div>
 
+      {/* Content */}
       {tab === 'flashcard' && (
-        <Flashcard vocabulary={vocabulary} progress={progress}
-          scope={getScope(nickname)} userId={nickname}
-          onProgressUpdate={handleProgressUpdate} profileLabel={nickname} />
+        <Flashcard
+          vocabulary={dueWords.length > 0 ? dueWords : activeVoc}
+          progress={progress}
+          scope={getScope(nickname)}
+          userId={nickname}
+          onProgressUpdate={handleProgressUpdate}
+          profileLabel={nickname} />
+      )}
+      {tab === 'listen' && (
+        <ListeningMode
+          vocabulary={activeVoc}
+          onComplete={(s) => console.log('listen', s)} />
+      )}
+      {tab === 'speak' && (
+        <SpeakingMode
+          vocabulary={activeVoc}
+          onComplete={(s) => console.log('speak', s)} />
       )}
       {tab === 'wordlist' && (
         <WordList vocabulary={vocabulary} allTags={allTags}
