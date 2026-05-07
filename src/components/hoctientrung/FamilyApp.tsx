@@ -8,6 +8,7 @@ import {
 } from './storage'
 import { reviewSM2, isDue, defaultSRS, qualityFromSimple, SRSData } from './srs'
 import { HSK1 } from './hskData'
+import Link from 'next/link'
 import Flashcard from './Flashcard'
 import WordList from './WordList'
 import WordForm from './WordForm'
@@ -164,6 +165,17 @@ export default function FamilyApp() {
             ))}
           </div>
         </div>
+
+        {/* Bài học banner */}
+        <Link href="/hoc-tieng-trung/bai-hoc"
+          className="bg-amber-950 text-white rounded-2xl p-4 flex items-center gap-4 active:scale-95 transition-all">
+          <span className="text-3xl">📚</span>
+          <div className="flex-1">
+            <p className="font-bold text-base">Bài học tiếng Trung</p>
+            <p className="text-xs opacity-70">10 bài giao tiếp theo tình huống thực tế</p>
+          </div>
+          <span className="opacity-50">›</span>
+        </Link>
 
         {/* Practice modes */}
         <div className="bg-[#FFFDF8] rounded-2xl p-4 border border-[#E5E0D8]">

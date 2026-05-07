@@ -107,3 +107,61 @@ export function getPublicNickname(): string | null {
 export function setPublicNickname(name: string): void {
   localStorage.setItem('fc_public_nickname', name)
 }
+
+// --- Lesson Progress ---
+export interface LessonProgress {
+  started: boolean
+  completedDrills: string[]           // drill IDs đã hoàn thành
+  speakRepeatCounts: Record<string, number> // drillId → số lần lặp
+  quizScore?: number
+  completed: boolean
+  completedAt?: string
+}
+
+function defaultLessonProgress(): LessonProgress {
+  return { started: false, completedDrills: [], speakRepeatCounts: {}, completed: false }
+}
+
+function lessonProgressKey(lessonId: string, userId: string) {
+  return `lp_${lessonId}_${userId}`
+}
+
+export function getLessonProgress(lessonId: string, userId: string): LessonProgress {
+  if (typeof window === 'undefined') return defaultLessonProgress()
+  try {
+    return JSON.parse(localStorage.getItem(lessonProgressKey(lessonId, userId)) || 'null') || defaultLessonProgress()
+  } catch { return defaultLessonProgress() }
+}
+
+export function saveLessonProgress(lessonId: string, userId: string, progress: LessonProgress): void {
+  localStorage.setItem(lessonProgressKey(lessonId, userId), JSON.stringify(progress))
+}
+
+export function markDrillDone(lessonId: string, userId: string, drillId: string, repeatCount: number): void {
+  const p = getLessonProgress(lessonId, userId)
+  p.started = true
+  if (!p.completedDrills.includes(drillId)) p.completedDrills.push(drillId)
+  p.speakRepeatCounts[drillId] = Math.max(p.speakRepeatCounts[drillId] || 0, repeatCount)
+  saveLessonProgress(lessonId, userId, p)
+}
+
+export function markLessonComplete(lessonId: string, userId: string, quizScore?: number): void {
+  const p = getLessonProgress(lessonId, userId)
+  p.completed = true
+  p.completedAt = todayStr()
+  if (quizScore !== undefined) p.quizScore = quizScore
+  saveLessonProgress(lessonId, userId, p)
+}
+
+export function getAllLessonProgress(userId: string): Record<string, LessonProgress> {
+  if (typeof window === 'undefined') return {}
+  const result: Record<string, LessonProgress> = {}
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i)
+    if (key && key.startsWith(`lp_`) && key.endsWith(`_${userId}`)) {
+      const lessonId = key.slice(3, -(userId.length + 1))
+      try { result[lessonId] = JSON.parse(localStorage.getItem(key) || '{}') } catch {}
+    }
+  }
+  return result
+}

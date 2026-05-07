@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { useState, useEffect } from 'react'
 import {
   getVocabulary, addWordToScope, deleteWordFromScope,
@@ -118,6 +119,19 @@ export default function PublicApp() {
           className="text-xs text-amber-800/40 hover:text-amber-800 border border-[#E5E0D8] rounded-lg px-3 py-1.5">
           Đổi tên
         </button>
+      </div>
+
+      {/* Bài học banner */}
+      <div className="px-4 py-3 bg-[#FFFDF8] border-b border-[#E5E0D8]">
+        <Link href="/hoc-tieng-trung/bai-hoc"
+          className="flex items-center gap-3 bg-amber-950 text-white rounded-2xl px-4 py-3 active:scale-95 transition-all">
+          <span className="text-2xl">📚</span>
+          <div className="flex-1">
+            <p className="font-bold text-sm">Bài học giao tiếp</p>
+            <p className="text-xs opacity-70">10 bài thực tế theo tình huống</p>
+          </div>
+          <span className="opacity-50 text-lg">›</span>
+        </Link>
       </div>
 
       {/* Tab nav */}
