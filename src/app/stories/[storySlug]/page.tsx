@@ -60,7 +60,7 @@ export default async function StoryDetailPage({ params }: PageProps) {
             <div className="flex-1">
               <h1 className="text-2xl md:text-3xl font-bold text-amber-950 leading-snug mb-1">{story.title}</h1>
               <p className="text-amber-700/70 text-sm mb-4">
-                Tác giả: <span className="font-semibold text-amber-800">{story.author ?? 'Trung Vũ'}</span>
+                Tác giả: <span className="font-semibold text-amber-800">{story.author ?? 'Ẩn danh'}</span>
               </p>
 
               {/* Badges */}
