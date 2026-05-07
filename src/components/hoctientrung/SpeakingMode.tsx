@@ -2,7 +2,8 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { Word } from './storage'
-import { speakChinese, recordAndAnalyzeTone, ToneResult, checkSupport } from './toneDetector'
+import { recordAndAnalyzeTone, ToneResult, checkSupport } from './toneDetector'
+import { playChineseAudio, preloadVoices } from './audio'
 
 interface Props {
   vocabulary: Word[]
@@ -45,6 +46,7 @@ export default function SpeakingMode({ vocabulary, onComplete }: Props) {
 
   useEffect(() => {
     if (vocabulary.length > 0) setDeck(shuffle(vocabulary).slice(0, 8))
+    preloadVoices()
   }, [vocabulary])
 
   const current = deck[index]
@@ -78,8 +80,12 @@ export default function SpeakingMode({ vocabulary, onComplete }: Props) {
   }
 
   function playCurrentWord() {
-    if (current) { speakChinese(current.chinese, 0.75); setPhase('listen') }
-    setTimeout(() => setPhase('ready'), 1500)
+    if (!current) return
+    setPhase('listen')
+    playChineseAudio(current.chinese, {
+      onEnd:  () => setPhase('ready'),
+      onError: () => setPhase('ready'),
+    })
   }
 
   if (done || !current) return (

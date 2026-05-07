@@ -6,7 +6,8 @@ import {
   Lesson, DialogueLine, SpeakingDrill, QuizItem,
   ROLE_LABELS, getLessonBySlug,
 } from './lessonData'
-import { speakChinese, recordAndAnalyzeTone, checkSupport } from './toneDetector'
+import { recordAndAnalyzeTone, checkSupport } from './toneDetector'
+import { playChineseAudio, preloadVoices } from './audio'
 import {
   getActiveScope, getLessonProgress, markDrillDone,
   markLessonComplete, LessonProgress,
@@ -49,6 +50,7 @@ export default function LessonDetail({ slug }: { slug: string }) {
   const { tts } = checkSupport()
 
   useEffect(() => {
+    preloadVoices() // warm up TTS voice list for mobile
     const scope = getActiveScope()
     if (scope && lesson) {
       setUserId(scope.userId)
@@ -187,10 +189,13 @@ function SectionCore({ lesson, showPinyin, tts }: { lesson: Lesson; showPinyin: 
   const [playing, setPlaying] = useState(false)
   const cs = lesson.coreSentence
 
-  function play(rate = 0.85) {
+  function play(slow = false) {
     setPlaying(true)
-    speakChinese(cs.ttsText, rate)
-    setTimeout(() => setPlaying(false), 2000)
+    playChineseAudio(cs.ttsText, {
+      slow,
+      onEnd:  () => setPlaying(false),
+      onError: () => setPlaying(false),
+    })
   }
 
   return (
@@ -205,11 +210,11 @@ function SectionCore({ lesson, showPinyin, tts }: { lesson: Lesson; showPinyin: 
 
       {tts && (
         <div className="flex gap-3">
-          <button onClick={() => play(0.85)} disabled={playing}
+          <button onClick={() => play()} disabled={playing}
             className={`flex-1 py-4 rounded-2xl font-semibold text-sm transition-all ${playing ? 'bg-amber-500 text-white' : 'bg-amber-700 text-white hover:bg-amber-800'}`}>
             {playing ? '🔊 Đang phát...' : '🔊 Nghe câu mẫu'}
           </button>
-          <button onClick={() => play(0.5)} disabled={playing}
+          <button onClick={() => play(true)} disabled={playing}
             className="flex-1 py-4 rounded-2xl font-semibold text-sm bg-amber-50 border-2 border-amber-200 text-amber-800 hover:bg-amber-100 transition-all">
             🐢 Nghe chậm
           </button>
@@ -256,7 +261,7 @@ function SectionPatterns({ lesson, showPinyin, tts }: { lesson: Lesson; showPiny
                       <p className="text-xs text-amber-800/60">{ex.vi}</p>
                     </div>
                     {tts && (
-                      <button onClick={() => speakChinese(ex.ttsText)}
+                      <button onClick={() => playChineseAudio(ex.ttsText)}
                         className="shrink-0 w-9 h-9 rounded-full bg-amber-100 flex items-center justify-center text-amber-700 hover:bg-amber-200 transition-colors">
                         🔊
                       </button>
@@ -315,7 +320,7 @@ function SectionDialogue({ lesson, showPinyin, tts }: { lesson: Lesson; showPiny
               <div className="flex items-center justify-between mb-2">
                 <span className="text-xs font-semibold text-amber-800/60 uppercase">{ROLE_LABELS[line.role]}</span>
                 {tts && !isHidden && (
-                  <button onClick={() => speakChinese(line.ttsText)}
+                  <button onClick={() => playChineseAudio(line.ttsText)}
                     className="w-7 h-7 rounded-full bg-white/70 flex items-center justify-center text-sm hover:bg-white transition-colors">
                     🔊
                   </button>
@@ -351,7 +356,7 @@ function SectionVocab({ lesson, tts }: { lesson: Lesson; tts: boolean }) {
               <>
                 <p className="text-xs text-amber-800/70 mt-1">{v.vi}</p>
                 {tts && (
-                  <button onClick={e => { e.stopPropagation(); speakChinese(v.ttsText) }}
+                  <button onClick={e => { e.stopPropagation(); playChineseAudio(v.ttsText) }}
                     className="mt-2 text-xs bg-amber-100 hover:bg-amber-200 text-amber-700 px-2 py-1 rounded-lg transition-colors">
                     🔊 Nghe
                   </button>
@@ -405,8 +410,10 @@ function DrillCard({
 
   function play() {
     setPlaying(true)
-    speakChinese(drill.sentence.ttsText, 0.8)
-    setTimeout(() => setPlaying(false), 2000)
+    playChineseAudio(drill.sentence.ttsText, {
+      onEnd:  () => setPlaying(false),
+      onError: () => setPlaying(false),
+    })
   }
 
   function handleRepeat() {

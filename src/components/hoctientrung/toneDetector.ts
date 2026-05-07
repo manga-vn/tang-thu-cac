@@ -1,7 +1,6 @@
 // ============================================================
-// Tone Detector — Web Audio API + Autocorrelation
-// Phân tích đường cao độ giọng nói → nhận biết 4 thanh tiếng Trung
-// Độ chính xác ~70-80% với giọng rõ và yên tĩnh
+// toneDetector.ts — Microphone pitch analysis only
+// TTS (speak Chinese) has moved to audio.ts
 // ============================================================
 
 export type ToneResult = {
@@ -11,7 +10,7 @@ export type ToneResult = {
   label: string
 }
 
-// Autocorrelation pitch detection (YIN-lite)
+// ─── Autocorrelation pitch detection (YIN-lite) ───────────────
 function detectPitch(buffer: Float32Array, sampleRate: number): number {
   const SIZE = buffer.length
   const MAX_SAMPLES = Math.floor(SIZE / 2)
@@ -21,7 +20,7 @@ function detectPitch(buffer: Float32Array, sampleRate: number): number {
 
   for (let i = 0; i < SIZE; i++) rms += buffer[i] * buffer[i]
   rms = Math.sqrt(rms / SIZE)
-  if (rms < 0.005) return -1   // quá yên lặng
+  if (rms < 0.005) return -1   // too quiet
 
   for (let offset = 20; offset < MAX_SAMPLES; offset++) {
     let corr = 0
@@ -29,16 +28,13 @@ function detectPitch(buffer: Float32Array, sampleRate: number): number {
       corr += buffer[i] * buffer[i + offset]
     }
     corr = corr / MAX_SAMPLES
-    if (corr > bestCorr) {
-      bestCorr = corr
-      best = offset
-    }
+    if (corr > bestCorr) { bestCorr = corr; best = offset }
   }
   if (bestCorr > 0.01 && best > 0) return sampleRate / best
   return -1
 }
 
-// Classify tone from pitch contour
+// ─── Classify tone from pitch contour ────────────────────────
 function classifyTone(pitches: number[]): ToneResult {
   const valid = pitches.filter(p => p > 0)
   if (valid.length < 3) {
@@ -54,34 +50,35 @@ function classifyTone(pitches: number[]): ToneResult {
   const avgMiddle = middle.length ? middle.reduce((a, b) => a + b, 0) / middle.length : (avgFirst + avgLast) / 2
   const avgAll    = valid.reduce((a, b) => a + b, 0) / valid.length
 
-  const rise  = avgLast - avgFirst          // dương = lên, âm = xuống
-  const dip   = Math.min(...valid) - avgAll  // âm = có chỗ xuống thấp
+  const rise  = avgLast - avgFirst
+  const dip   = Math.min(...valid) - avgAll
   const range = Math.max(...valid) - Math.min(...valid)
 
   let detected: 1 | 2 | 3 | 4 = 1
   let confidence = 0.5
 
   if (Math.abs(rise) < range * 0.2 && range < avgAll * 0.15) {
-    // Biên độ nhỏ, ổn định → Thanh 1 (ngang)
     detected = 1; confidence = 0.75
   } else if (rise > range * 0.3) {
-    // Lên rõ → Thanh 2 (sắc)
     detected = 2; confidence = 0.7 + Math.min(0.2, rise / avgAll)
   } else if (dip < -range * 0.2 && avgFirst > avgMiddle && avgLast > avgMiddle) {
-    // Xuống rồi lên → Thanh 3 (hỏi)
     detected = 3; confidence = 0.65
   } else if (rise < -range * 0.3) {
-    // Xuống mạnh → Thanh 4 (nặng)
     detected = 4; confidence = 0.7 + Math.min(0.2, -rise / avgAll)
   } else {
     confidence = 0.4
   }
 
-  const labels = { 1: 'Thanh 1 — Ngang (ˉ)', 2: 'Thanh 2 — Sắc (ˊ)', 3: 'Thanh 3 — Hỏi (ˇ)', 4: 'Thanh 4 — Nặng (ˋ)' }
+  const labels = {
+    1: 'Thanh 1 — Ngang (ˉ)',
+    2: 'Thanh 2 — Sắc (ˊ)',
+    3: 'Thanh 3 — Hỏi (ˇ)',
+    4: 'Thanh 4 — Nặng (ˋ)',
+  } as const
   return { detected, confidence: Math.min(1, confidence), pitchContour: valid, label: labels[detected] }
 }
 
-// Main: record audio and analyze tone
+// ─── Public: record microphone and analyze tone ───────────────
 export async function recordAndAnalyzeTone(durationMs = 2000): Promise<ToneResult> {
   const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
   const audioCtx = new AudioContext()
@@ -94,7 +91,6 @@ export async function recordAndAnalyzeTone(durationMs = 2000): Promise<ToneResul
   const buffer = new Float32Array(analyser.fftSize)
   const pitches: number[] = []
 
-  // Sample pitch every 50ms during recording
   const interval = setInterval(() => {
     analyser.getFloatTimeDomainData(buffer)
     pitches.push(detectPitch(buffer, sampleRate))
@@ -110,81 +106,13 @@ export async function recordAndAnalyzeTone(durationMs = 2000): Promise<ToneResul
   return classifyTone(pitches)
 }
 
-// ─── TTS: Speak a Chinese word using Web Speech API ───────────────────────────
-// Rules:
-//   1. speak() PHẢI gọi sync từ user gesture (iOS requirement)
-//   2. KHÔNG set .voice — để browser/OS tự chọn theo lang (Android requirement)
-//   3. cancel() + resume() trước khi speak để tránh stuck state
-
-function _isIOS(): boolean {
-  if (typeof navigator === 'undefined') return false
-  return /iPad|iPhone|iPod/.test(navigator.userAgent) ||
-    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
-}
-
-function _findZhVoice(): SpeechSynthesisVoice | null {
-  if (typeof window === 'undefined' || !window.speechSynthesis) return null
-  const voices = window.speechSynthesis.getVoices()
-  return voices.find(v =>
-    v.lang === 'zh-CN' || v.lang === 'zh_CN' ||
-    v.lang.startsWith('zh') || v.lang.startsWith('cmn') ||
-    v.name.toLowerCase().includes('chinese') ||
-    v.name.toLowerCase().includes('mandarin') ||
-    v.name.toLowerCase().includes('putonghua')
-  ) ?? null
-}
-
-export function speakChinese(text: string, rate = 0.85): void {
-  if (typeof window === 'undefined' || !window.speechSynthesis) return
-  const synth = window.speechSynthesis
-
-  synth.cancel()
-  if (synth.paused) synth.resume()
-
-  const doSpeak = () => {
-    const utter = new SpeechSynthesisUtterance(text)
-    utter.rate = rate
-    utter.pitch = 1
-    const zhVoice = _findZhVoice()
-    if (zhVoice) {
-      utter.voice = zhVoice
-      utter.lang = zhVoice.lang
-    } else {
-      utter.lang = 'zh-CN'
-    }
-    synth.speak(utter)
-  }
-
-  // Android Chrome: cần delay ~100ms sau cancel() để TTS queue reset
-  // iOS Safari: speak() phải sync trong user gesture, nhưng 100ms vẫn ok nếu từ click handler
-  if (_isIOS()) {
-    doSpeak()
-  } else {
-    setTimeout(doSpeak, 100)
-  }
-}
-
-// Kiểm tra TTS có khả năng hoạt động không (không đảm bảo 100% vì cần TTS engine)
-export function checkTTSLikely(): boolean {
-  if (typeof window === 'undefined' || !('speechSynthesis' in window)) return false
-  return true
-}
-
-// Preload danh sách giọng ngay khi gọi (Android cần voiceschanged event để populate)
-export function preloadVoices(): void {
-  if (typeof window === 'undefined' || !window.speechSynthesis) return
-  const voices = window.speechSynthesis.getVoices()
-  if (voices.length === 0 && window.speechSynthesis.onvoiceschanged === null) {
-    window.speechSynthesis.onvoiceschanged = () => {
-      window.speechSynthesis.onvoiceschanged = null
-    }
-  }
-}
-
-// Check if browser supports required APIs
+// ─── Support check (tts + microphone) ────────────────────────
 export function checkSupport(): { tts: boolean; microphone: boolean } {
   return {
     tts: typeof window !== 'undefined' && 'speechSynthesis' in window,
-    microphone: typeof window !== 'undefined' && 'AudioContext' in window && !!navigator.mediaDevices?.getUserMedia,
+    microphone:
+      typeof window !== 'undefined' &&
+      'AudioContext' in window &&
+      !!navigator.mediaDevices?.getUserMedia,
   }
 }

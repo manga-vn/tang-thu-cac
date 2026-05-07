@@ -2,7 +2,8 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { Word } from './storage'
-import { speakChinese, checkSupport, preloadVoices } from './toneDetector'
+import { checkSupport } from './toneDetector'
+import { playChineseAudio, preloadVoices } from './audio'
 
 interface Props {
   vocabulary: Word[]
@@ -39,8 +40,10 @@ export default function ListeningMode({ vocabulary, onComplete }: Props) {
   const playWord = useCallback(() => {
     if (!current) return
     setPlaying(true)
-    speakChinese(current.word.chinese)
-    setTimeout(() => setPlaying(false), 1500)
+    playChineseAudio(current.word.chinese, {
+      onEnd:  () => setPlaying(false),
+      onError: () => setPlaying(false),
+    })
   }, [current])
 
   // No auto-play — user must press the button (auto-play breaks on tab switch + blocked without user gesture)
