@@ -84,12 +84,6 @@ export default async function StoryDetailPage({ params }: PageProps) {
                     <p className="text-amber-700/60 text-xs">Lượt đọc</p>
                   </div>
                 )}
-                {story.rating && (
-                  <div className="text-center">
-                    <p className="font-bold text-amber-950 text-lg">★ {story.rating}</p>
-                    <p className="text-amber-700/60 text-xs">Đánh giá</p>
-                  </div>
-                )}
                 {story.updatedAt && (
                   <div className="text-center">
                     <p className="font-bold text-amber-950 text-lg">

@@ -39,7 +39,7 @@ export default function StoryCard({ story, layout = 'grid' }: StoryCardProps) {
               <div className="flex items-center gap-3 text-xs text-amber-700/60">
                 <span>📖 {story.chapters.length} chương</span>
                 {story.views && <span>👁 {story.views.toLocaleString('vi-VN')}</span>}
-                {story.rating && <span>★ {story.rating}</span>}
+                {/* {story.rating && <span>★ {story.rating}</span>} */}
               </div>
               <Link href={`/stories/${story.slug}`}
                 className="bg-[#8B5E34] text-white px-3 py-1.5 rounded-lg text-xs font-medium hover:bg-[#6F4726] transition-colors shrink-0">
@@ -72,7 +72,7 @@ export default function StoryCard({ story, layout = 'grid' }: StoryCardProps) {
           {story.hasAudio && <AudioBadge small />}
         </div>
         {story.rating && (
-          <div className="absolute bottom-2 left-2 bg-black/50 backdrop-blur-sm text-yellow-300 text-xs px-2 py-0.5 rounded font-medium">
+          <div className="absolute bottom-2 left-2 bg-black/50 backdrop-blur-sm text-yellow-300 text-xs px-2 py-0.5 rounded font-medium hidden">
             ★ {story.rating}
           </div>
         )}
