@@ -28,6 +28,12 @@ const FEATURED_GENRES = [
   { name: "Hài hước", emoji: "🎭", desc: "Hài hước, dí dỏm, thư giãn" },
 ];
 
+const HOMEPAGE_EXCLUDED_STORY_SLUGS = new Set(["tho-san-gia-tri"]);
+
+function shouldShowOnHomepage(story: { slug: string }) {
+  return !HOMEPAGE_EXCLUDED_STORY_SLUGS.has(story.slug);
+}
+
 export default async function HomePage() {
   const [latestChapters, featured, topStories, audioStories, recentStories] = await Promise.all([
     getLatestChapters(6),
@@ -36,6 +42,11 @@ export default async function HomePage() {
     getAudioStories(),
     getRecentlyUpdatedStories(8),
   ]);
+  const homepageLatestChapters = latestChapters.filter(({ story }) => shouldShowOnHomepage(story));
+  const homepageFeatured = featured.filter(shouldShowOnHomepage);
+  const homepageTopStories = topStories.filter(shouldShowOnHomepage);
+  const homepageAudioStories = audioStories.filter(shouldShowOnHomepage);
+  const homepageRecentStories = recentStories.filter(shouldShowOnHomepage);
 
   return (
     <div className="min-h-screen">
@@ -74,7 +85,7 @@ export default async function HomePage() {
       <section id="latest" className="max-w-6xl mx-auto px-4 py-14">
         <SectionHeader title="📖 Mới cập nhật" subtitle="Những chương vừa được đăng" href="/stories" />
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {latestChapters.map(({ story, chapter }) => (
+          {homepageLatestChapters.map(({ story, chapter }) => (
             <Link key={`${story.id}-${chapter.id}`}
               href={`/stories/${story.slug}/${chapter.slug}`}
               className="flex gap-3 bg-[#FFFDF8] rounded-xl border border-[#E5E0D8] p-3 hover:shadow-md hover:border-amber-300 transition-all group">
@@ -99,12 +110,12 @@ export default async function HomePage() {
       </section>
 
       {/* ── Đề cử ── */}
-      {featured.length > 0 && (
+      {homepageFeatured.length > 0 && (
         <section className="bg-amber-50/60 border-y border-[#E5E0D8]">
           <div className="max-w-6xl mx-auto px-4 py-14">
             <SectionHeader title="⭐ Truyện đề cử" subtitle="Được tác giả chọn lọc và giới thiệu" href="/stories" />
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-5">
-              {featured.map(story => <StoryCard key={story.id} story={story} />)}
+              {homepageFeatured.map(story => <StoryCard key={story.id} story={story} />)}
             </div>
           </div>
         </section>
@@ -124,7 +135,7 @@ export default async function HomePage() {
                 </span>
               ))}
             </div>
-            <RankingList stories={topStories.slice(0, 6)} />
+            <RankingList stories={homepageTopStories.slice(0, 6)} />
           </div>
 
           {/* Thể loại nổi bật */}
@@ -147,12 +158,12 @@ export default async function HomePage() {
       </section>
 
       {/* ── Truyện mới ra ── */}
-      {recentStories.length > 0 && (
+      {homepageRecentStories.length > 0 && (
         <section className="bg-amber-50/60 border-y border-[#E5E0D8]">
           <div className="max-w-6xl mx-auto px-4 py-14">
             <SectionHeader title="🆕 Truyện mới ra" href="/stories" />
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {recentStories.slice(0, 4).map(story => <StoryCard key={story.id} story={story} layout="list" />)}
+              {homepageRecentStories.slice(0, 4).map(story => <StoryCard key={story.id} story={story} layout="list" />)}
             </div>
           </div>
         </section>
@@ -161,9 +172,9 @@ export default async function HomePage() {
       {/* ── Audio ── */}
       <section className="max-w-6xl mx-auto px-4 py-14">
         <SectionHeader title="🎧 Truyện audio" subtitle="Vừa đọc vừa nghe" href="/audio" />
-        {audioStories.length > 0 ? (
+        {homepageAudioStories.length > 0 ? (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {audioStories.map(story => (
+            {homepageAudioStories.map(story => (
               <div key={story.id} className="relative">
                 <StoryCard story={story} />
                 <div className="absolute top-2 left-2"><AudioBadge small /></div>
