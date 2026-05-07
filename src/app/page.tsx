@@ -42,23 +42,19 @@ export default async function HomePage() {
       {/* ── Hero ── */}
       <section className="relative bg-gradient-to-br from-amber-950 via-amber-900 to-amber-800 text-white overflow-hidden">
         <div className="absolute inset-0 opacity-10 bg-[url('/images/pattern.png')] bg-repeat" />
-        <div className="relative max-w-6xl mx-auto px-4 py-20 md:py-28 text-center">
-          <span className="inline-block text-5xl mb-4">📚</span>
-          <h1 className="text-4xl md:text-6xl font-bold mb-4 tracking-tight">Gác Truyện</h1>
-          <p className="text-xl md:text-2xl text-amber-200/90 font-light italic mb-8">
+        <div className="relative max-w-6xl mx-auto px-4 py-10 sm:py-16 md:py-28 text-center">
+          <span className="inline-block text-4xl md:text-5xl mb-3 md:mb-4">📚</span>
+          <h1 className="text-3xl md:text-6xl font-bold mb-3 md:mb-4 tracking-tight">Gác Truyện</h1>
+          <p className="text-lg md:text-2xl text-amber-200/90 font-light italic mb-5 md:mb-8">
             "Đọc một chương, ở lại một đời."
           </p>
-          <p className="text-amber-300/70 max-w-xl mx-auto mb-10 text-sm leading-relaxed">
+          <p className="hidden sm:block text-amber-300/70 max-w-xl mx-auto mb-8 md:mb-10 text-sm leading-relaxed">
             Nơi những câu chuyện tiên hiệp, đô thị, ngôn tình được viết ra từ trái tim — dành cho bạn đọc đam mê truyện chữ.
           </p>
           <div className="flex flex-col items-stretch gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-center">
             <Link href="/stories"
               className="w-full sm:w-auto bg-white text-amber-900 px-8 py-3 rounded-full font-semibold hover:bg-amber-50 transition-colors shadow-lg text-center">
               Đọc truyện ngay
-            </Link>
-            <Link href="#latest"
-              className="w-full sm:w-auto border border-white/40 text-white px-8 py-3 rounded-full font-medium hover:bg-white/10 transition-colors text-center">
-              Truyện mới cập nhật
             </Link>
             <Link href="/hoc-tieng-trung/bai-hoc"
               className="w-full sm:w-auto bg-amber-300 text-amber-950 px-8 py-3 rounded-full font-bold shadow-xl shadow-amber-950/25 ring-2 ring-white/25 hover:bg-amber-200 hover:shadow-2xl active:scale-[0.98] transition-all text-center">
@@ -69,6 +65,10 @@ export default async function HomePage() {
                   Mới
                 </span>
               </span>
+            </Link>
+            <Link href="#latest"
+              className="w-full sm:w-auto border border-white/40 text-white px-8 py-3 rounded-full font-medium hover:bg-white/10 transition-colors text-center">
+              Truyện mới cập nhật
             </Link>
           </div>
         </div>
