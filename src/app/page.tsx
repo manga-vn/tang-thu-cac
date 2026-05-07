@@ -42,33 +42,29 @@ export default async function HomePage() {
       {/* ── Hero ── */}
       <section className="relative bg-gradient-to-br from-amber-950 via-amber-900 to-amber-800 text-white overflow-hidden">
         <div className="absolute inset-0 opacity-10 bg-[url('/images/pattern.png')] bg-repeat" />
-        <div className="relative max-w-6xl mx-auto px-4 py-10 sm:py-16 md:py-28 text-center">
+        <div className="relative max-w-6xl mx-auto px-4 py-9 sm:py-16 md:py-28 text-center">
           <span className="inline-block text-4xl md:text-5xl mb-3 md:mb-4">📚</span>
           <h1 className="text-3xl md:text-6xl font-bold mb-3 md:mb-4 tracking-tight">Gác Truyện</h1>
-          <p className="text-lg md:text-2xl text-amber-200/90 font-light italic mb-5 md:mb-8">
+          <p className="text-lg md:text-2xl text-amber-200/90 font-light italic mb-4 md:mb-8">
             "Đọc một chương, ở lại một đời."
           </p>
           <p className="hidden sm:block text-amber-300/70 max-w-xl mx-auto mb-8 md:mb-10 text-sm leading-relaxed">
             Nơi những câu chuyện tiên hiệp, đô thị, ngôn tình được viết ra từ trái tim — dành cho bạn đọc đam mê truyện chữ.
           </p>
-          <div className="flex flex-col items-stretch gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-center">
+          <div className="mx-auto flex w-full max-w-md items-center justify-center gap-2 sm:max-w-none sm:gap-3">
             <Link href="/stories"
-              className="w-full sm:w-auto bg-white text-amber-900 px-8 py-3 rounded-full font-semibold hover:bg-amber-50 transition-colors shadow-lg text-center">
+              className="flex-[1.15] sm:flex-none bg-white text-amber-900 px-5 sm:px-8 py-2.5 sm:py-3 rounded-full text-sm sm:text-base font-semibold hover:bg-amber-50 transition-colors shadow-lg text-center whitespace-nowrap">
               Đọc truyện ngay
             </Link>
             <Link href="/hoc-tieng-trung/bai-hoc"
-              className="self-center w-fit max-w-full bg-amber-200/95 text-amber-950 px-4 py-2 rounded-full text-sm font-semibold shadow-sm ring-1 ring-white/25 hover:bg-amber-100 active:scale-[0.98] transition-all text-center">
-              <span className="inline-flex items-center justify-center gap-1.5">
+              className="flex-1 sm:flex-none bg-amber-200/95 text-amber-950 px-3.5 sm:px-4 py-2.5 sm:py-3 rounded-full text-sm font-semibold shadow-sm ring-1 ring-white/25 hover:bg-amber-100 active:scale-[0.98] transition-all text-center whitespace-nowrap">
+              <span className="inline-flex items-center justify-center gap-1 sm:gap-1.5">
                 <span aria-hidden="true">🇨🇳</span>
                 <span>Học tiếng Trung</span>
-                <span className="rounded-full bg-amber-950/10 px-1.5 py-0.5 text-[9px] font-bold uppercase text-amber-950/75">
+                <span className="rounded-full bg-amber-950/10 px-1.5 py-0.5 text-[8px] sm:text-[9px] font-bold uppercase text-amber-950/75">
                   Mới
                 </span>
               </span>
-            </Link>
-            <Link href="#latest"
-              className="w-full sm:w-auto border border-white/40 text-white px-8 py-3 rounded-full font-medium hover:bg-white/10 transition-colors text-center">
-              Truyện mới cập nhật
             </Link>
           </div>
         </div>
