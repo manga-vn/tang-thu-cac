@@ -1,9 +1,13 @@
 import { LESSONS_QC, Lesson } from './LESSONS_QC'
 
-export type ChineseLesson = Lesson & {
-  id: number
+type LegacyLessonFields = {
+  keyPhrase?: string
+  keyDialoguePoints?: string[]
+  focusVocabulary?: string[]
+}
+
+export type ChineseLesson = Lesson & LegacyLessonFields & {
   day: number
-  moduleLabel: string
 }
 
 export const MODULE_LABELS: Record<Lesson['module'], string> = {
@@ -72,7 +76,7 @@ export function getReadySentences(lesson: ChineseLesson) {
 
 export function getDialogueLines(lesson: ChineseLesson) {
   if (lesson.dialogue?.length) return lesson.dialogue
-  return (lesson.keyDialoguePoints ?? []).map(line => ({
+  return (lesson.keyDialoguePoints ?? []).map((line: string) => ({
     speaker: getSpeakerText(line),
     chinese: getSentenceText(line),
     pinyin: '',
@@ -83,12 +87,15 @@ export function getDialogueLines(lesson: ChineseLesson) {
 
 export function getVocabularyItems(lesson: ChineseLesson) {
   if (lesson.vocabulary?.length) return lesson.vocabulary
-  return (lesson.focusVocabulary ?? []).map(item => {
+  return (lesson.focusVocabulary ?? []).map((item: string) => {
     const parsed = parseVocabulary(item)
     return {
       chinese: parsed.chinese,
       pinyin: parsed.pinyin,
       vietnameseMeaning: 'Từ/cụm từ trọng tâm trong bài',
+      exampleSentenceChinese: parsed.chinese,
+      exampleSentencePinyin: parsed.pinyin,
+      exampleSentenceVietnamese: 'Ví dụ dùng trong bối cảnh bài học.',
       usageNote: `Gặp trong bối cảnh: ${lesson.title}`,
     }
   })

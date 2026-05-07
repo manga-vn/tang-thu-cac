@@ -1,7 +1,7 @@
 'use client'
 
-import { useMemo, useState } from 'react'
-import { playChineseAudio } from '@/components/hoctientrung/audio'
+import { useEffect, useMemo, useState } from 'react'
+import { playChineseAudio, preloadVoices } from '@/components/hoctientrung/audio'
 
 type SpeechRecognitionResultLike = {
   readonly length: number
@@ -54,6 +54,14 @@ export default function ChineseAudioControls({ text, compact = false, withSpeech
       ? 'Khá ổn'
       : 'Thử lại chậm hơn'
   }, [text, transcript])
+
+  useEffect(() => {
+    preloadVoices()
+
+    if (!withSpeechCheck) return
+    const speechWindow = window as SpeechWindow
+    setSpeechSupported(Boolean(speechWindow.SpeechRecognition ?? speechWindow.webkitSpeechRecognition))
+  }, [withSpeechCheck])
 
   async function handlePlay(slow = false) {
     if (!text || status === 'playing') return
@@ -115,7 +123,7 @@ export default function ChineseAudioControls({ text, compact = false, withSpeech
       >
         Nghe chậm
       </button>
-      {withSpeechCheck && (
+      {withSpeechCheck && speechSupported !== false && (
         <button
           type="button"
           onClick={handleSpeak}
