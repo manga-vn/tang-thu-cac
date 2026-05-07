@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { Word } from './storage'
-import { speakChinese, checkSupport } from './toneDetector'
+import { speakChinese, checkSupport, preloadVoices } from './toneDetector'
 
 interface Props {
   vocabulary: Word[]
@@ -31,6 +31,7 @@ export default function ListeningMode({ vocabulary, onComplete }: Props) {
 
   useEffect(() => {
     if (vocabulary.length >= 4) setDeck(shuffle(vocabulary).slice(0, 10))
+    preloadVoices() // Kick off voice loading early so getVoices() is ready when user taps Play
   }, [vocabulary])
 
   const current = deck[index] ? buildQuestion(deck[index], vocabulary) : null
@@ -42,8 +43,7 @@ export default function ListeningMode({ vocabulary, onComplete }: Props) {
     setTimeout(() => setPlaying(false), 1500)
   }, [current])
 
-  // Auto-play when question changes
-  useEffect(() => { if (current && tts) setTimeout(playWord, 300) }, [index, deck])
+  // No auto-play — user must press the button (auto-play breaks on tab switch + blocked without user gesture)
 
   function handleSelect(wordId: string) {
     if (selected) return
@@ -107,13 +107,13 @@ export default function ListeningMode({ vocabulary, onComplete }: Props) {
 
       {/* Question */}
       <div className="flex-1 flex flex-col items-center">
-        <p className="text-amber-800/60 text-sm mb-6">Chọn nghĩa đúng của từ vừa nghe</p>
+        <p className="text-amber-800/60 text-sm mb-6">Nhấn ▶ để nghe, rồi chọn nghĩa đúng</p>
 
         {/* Play button */}
         <button onClick={playWord}
           className={`w-32 h-32 rounded-full flex flex-col items-center justify-center shadow-lg mb-8 transition-all active:scale-95 ${playing ? 'bg-amber-600 scale-105' : 'bg-amber-700 hover:bg-amber-800'} text-white`}>
           <span className="text-4xl mb-1">{playing ? '🔊' : '▶'}</span>
-          <span className="text-xs opacity-80">{playing ? 'Đang phát...' : 'Nghe lại'}</span>
+          <span className="text-xs opacity-80">{playing ? 'Đang phát...' : 'Nghe'}</span>
         </button>
 
         {/* Options */}

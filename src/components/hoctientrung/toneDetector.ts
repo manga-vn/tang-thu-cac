@@ -116,28 +116,69 @@ export async function recordAndAnalyzeTone(durationMs = 2000): Promise<ToneResul
 //   2. KHÔNG set .voice — để browser/OS tự chọn theo lang (Android requirement)
 //   3. cancel() + resume() trước khi speak để tránh stuck state
 
+function _isIOS(): boolean {
+  if (typeof navigator === 'undefined') return false
+  return /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
+}
+
+function _findZhVoice(): SpeechSynthesisVoice | null {
+  if (typeof window === 'undefined' || !window.speechSynthesis) return null
+  const voices = window.speechSynthesis.getVoices()
+  return voices.find(v =>
+    v.lang === 'zh-CN' || v.lang === 'zh_CN' ||
+    v.lang.startsWith('zh') || v.lang.startsWith('cmn') ||
+    v.name.toLowerCase().includes('chinese') ||
+    v.name.toLowerCase().includes('mandarin') ||
+    v.name.toLowerCase().includes('putonghua')
+  ) ?? null
+}
+
 export function speakChinese(text: string, rate = 0.85): void {
   if (typeof window === 'undefined' || !window.speechSynthesis) return
   const synth = window.speechSynthesis
 
-  // Reset state
   synth.cancel()
   if (synth.paused) synth.resume()
 
-  const utter = new SpeechSynthesisUtterance(text)
-  utter.lang = 'zh-CN'
-  utter.rate = rate
-  utter.pitch = 1
-  // KHÔNG set utter.voice — Android/iOS tự chọn engine phù hợp theo lang
-  // Nếu set sai voice object → im lặng hoàn toàn
+  const doSpeak = () => {
+    const utter = new SpeechSynthesisUtterance(text)
+    utter.rate = rate
+    utter.pitch = 1
+    const zhVoice = _findZhVoice()
+    if (zhVoice) {
+      utter.voice = zhVoice
+      utter.lang = zhVoice.lang
+    } else {
+      utter.lang = 'zh-CN'
+    }
+    synth.speak(utter)
+  }
 
-  synth.speak(utter)
+  // Android Chrome: cần delay ~100ms sau cancel() để TTS queue reset
+  // iOS Safari: speak() phải sync trong user gesture, nhưng 100ms vẫn ok nếu từ click handler
+  if (_isIOS()) {
+    doSpeak()
+  } else {
+    setTimeout(doSpeak, 100)
+  }
 }
 
 // Kiểm tra TTS có khả năng hoạt động không (không đảm bảo 100% vì cần TTS engine)
 export function checkTTSLikely(): boolean {
   if (typeof window === 'undefined' || !('speechSynthesis' in window)) return false
   return true
+}
+
+// Preload danh sách giọng ngay khi gọi (Android cần voiceschanged event để populate)
+export function preloadVoices(): void {
+  if (typeof window === 'undefined' || !window.speechSynthesis) return
+  const voices = window.speechSynthesis.getVoices()
+  if (voices.length === 0 && window.speechSynthesis.onvoiceschanged === null) {
+    window.speechSynthesis.onvoiceschanged = () => {
+      window.speechSynthesis.onvoiceschanged = null
+    }
+  }
 }
 
 // Check if browser supports required APIs
