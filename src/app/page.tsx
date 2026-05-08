@@ -3,15 +3,12 @@ import Image from "next/image";
 import {
   getLatestChapters,
   getFeaturedStories,
-  getTopStories,
   getAudioStories,
-  getRecentlyUpdatedStories,
+  getNewlyPublishedStories,
 } from "@/lib/stories";
 import CoverPlaceholder from "@/components/CoverPlaceholder";
 import StoryCard from "@/components/StoryCard";
 import SectionHeader from "@/components/SectionHeader";
-import GenreBadge from "@/components/GenreBadge";
-import RankingList from "@/components/RankingList";
 import AudioBadge from "@/components/AudioBadge";
 
 export const metadata = {
@@ -19,22 +16,12 @@ export const metadata = {
   description: "Website đọc truyện chữ – tiên hiệp, huyền huyễn, đô thị, ngôn tình. Gác Truyện là nơi lưu giữ những câu chuyện đáng đọc.",
 };
 
-const FEATURED_GENRES = [
-  { name: "Tiên hiệp", emoji: "⚔️", desc: "Tu tiên, kiếm hiệp, huyền ảo" },
-  { name: "Huyền huyễn", emoji: "🌌", desc: "Phép thuật, thế giới kỳ ảo" },
-  { name: "Đô thị", emoji: "🏙️", desc: "Cuộc sống hiện đại, bí ẩn" },
-  { name: "Ngôn tình", emoji: "💕", desc: "Tình yêu ngọt ngào, lãng mạn" },
-  { name: "Sảng văn", emoji: "😄", desc: "Nhẹ nhàng, vui vẻ, giải trí" },
-  { name: "Hài hước", emoji: "🎭", desc: "Hài hước, dí dỏm, thư giãn" },
-];
-
 export default async function HomePage() {
-  const [latestChapters, featured, topStories, audioStories, recentStories] = await Promise.all([
+  const [latestChapters, featured, audioStories, newStories] = await Promise.all([
     getLatestChapters(6),
     getFeaturedStories(4),
-    getTopStories(8),
     getAudioStories(),
-    getRecentlyUpdatedStories(8),
+    getNewlyPublishedStories(4),
   ]);
 
   return (
@@ -46,7 +33,7 @@ export default async function HomePage() {
           <span className="inline-block text-4xl md:text-5xl mb-3 md:mb-4">📚</span>
           <h1 className="text-3xl md:text-6xl font-bold mb-3 md:mb-4 tracking-tight">Gác Truyện</h1>
           <p className="text-lg md:text-2xl text-amber-200/90 font-light italic mb-4 md:mb-8">
-            "Đọc một chương, ở lại một đời."
+            &ldquo;Đọc một chương, ở lại một đời.&rdquo;
           </p>
           <p className="hidden sm:block text-amber-300/70 max-w-xl mx-auto mb-8 md:mb-10 text-sm leading-relaxed">
             Nơi những câu chuyện tiên hiệp, đô thị, ngôn tình được viết ra từ trái tim — dành cho bạn đọc đam mê truyện chữ.
@@ -70,9 +57,9 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ── Mới cập nhật ── */}
+      {/* ── Truyện mới cập nhật ── */}
       <section id="latest" className="max-w-6xl mx-auto px-4 py-14">
-        <SectionHeader title="📖 Mới cập nhật" subtitle="Những chương vừa được đăng" href="/stories" />
+        <SectionHeader title="📖 Truyện mới cập nhật" subtitle="Dựa trên chương mới nhất vừa được đăng" href="/stories" />
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {latestChapters.map(({ story, chapter }) => (
             <Link key={`${story.id}-${chapter.id}`}
@@ -110,49 +97,13 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* ── Top truyện + Thể loại (2 cột) ── */}
-      <section className="max-w-6xl mx-auto px-4 py-14">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-          {/* Top truyện */}
-          <div className="lg:col-span-2">
-            <SectionHeader title="🏆 Top truyện" subtitle="Xếp hạng theo lượt đọc" />
-            {/* Tab giả lập */}
-            <div className="flex gap-1 mb-5 bg-amber-100 p-1 rounded-xl w-fit">
-              {['Top ngày', 'Top tuần', 'Top tháng'].map((tab, i) => (
-                <span key={tab} className={`px-4 py-1.5 rounded-lg text-sm font-medium cursor-default ${i === 0 ? 'bg-white text-amber-900 shadow-sm' : 'text-amber-700'}`}>
-                  {tab}
-                </span>
-              ))}
-            </div>
-            <RankingList stories={topStories.slice(0, 6)} />
-          </div>
-
-          {/* Thể loại nổi bật */}
-          <div>
-            <SectionHeader title="📚 Thể loại" />
-            <div className="grid grid-cols-2 lg:grid-cols-1 gap-2.5">
-              {FEATURED_GENRES.map(genre => (
-                <Link key={genre.name} href={`/stories?genre=${encodeURIComponent(genre.name)}`}
-                  className="flex items-center gap-3 bg-[#FFFDF8] border border-[#E5E0D8] rounded-xl p-3 hover:shadow-sm hover:border-amber-300 transition-all group">
-                  <span className="text-2xl shrink-0">{genre.emoji}</span>
-                  <div className="min-w-0">
-                    <p className="font-semibold text-amber-950 text-sm group-hover:text-amber-700 transition-colors">{genre.name}</p>
-                    <p className="text-amber-800/50 text-xs truncate">{genre.desc}</p>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* ── Truyện mới ra ── */}
-      {recentStories.length > 0 && (
+      {newStories.length > 0 && (
         <section className="bg-amber-50/60 border-y border-[#E5E0D8]">
           <div className="max-w-6xl mx-auto px-4 py-14">
-            <SectionHeader title="🆕 Truyện mới ra" href="/stories" />
+            <SectionHeader title="🆕 Truyện mới ra" subtitle="Truyện được xuất bản trong 14 ngày gần đây" href="/stories" />
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {recentStories.slice(0, 4).map(story => <StoryCard key={story.id} story={story} layout="list" />)}
+              {newStories.map(story => <StoryCard key={story.id} story={story} layout="list" />)}
             </div>
           </div>
         </section>
@@ -175,7 +126,7 @@ export default async function HomePage() {
             <span className="text-5xl mb-4 block">🎧</span>
             <h3 className="text-lg font-bold text-purple-900 mb-2">Audio đang được phát triển</h3>
             <p className="text-purple-700/70 text-sm max-w-md mx-auto">
-              Sắp tới bạn có thể vừa đọc vừa nghe các bộ truyện yêu thích. Hãy đón chờ nhé!
+              Hiện chưa có audio chính thức. Sắp tới bạn có thể vừa đọc vừa nghe các bộ truyện yêu thích.
             </p>
             <Link href="/audio" className="inline-block mt-5 bg-purple-700 text-white px-6 py-2 rounded-full text-sm font-medium hover:bg-purple-800 transition-colors">
               Tìm hiểu thêm

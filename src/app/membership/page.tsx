@@ -27,8 +27,8 @@ const PLANS = [
   {
     id: "supporter",
     name: "Ủng hộ",
-    price: "29.000đ",
-    period: "/ tháng",
+    price: "Đang phát triển",
+    period: "",
     icon: "⭐",
     color: "border-amber-400 bg-amber-50",
     badge: "Phổ biến",
@@ -76,7 +76,7 @@ export default function MembershipPage() {
           <span className="text-5xl block mb-4">👑</span>
           <h1 className="text-3xl md:text-4xl font-bold mb-3">Hội viên Gác Truyện</h1>
           <p className="text-amber-200/80 max-w-xl mx-auto text-sm leading-relaxed">
-            Ủng hộ tác giả để các bộ truyện được tiếp tục. Hội viên sẽ nhận quyền lợi đặc biệt và đọc nội dung độc quyền.
+            Tính năng hội viên/ủng hộ đang được phát triển. Hiện website chưa tích hợp thanh toán hoặc mở bán gói hội viên.
           </p>
         </div>
       </div>

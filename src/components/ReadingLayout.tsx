@@ -67,10 +67,10 @@ export default function ReadingLayout({ story, chapter, prevChapter, nextChapter
           <div className="relative shrink-0">
             <button
               onClick={() => setShowSettings(!showSettings)}
-              className="text-amber-800 hover:text-amber-950 text-sm px-2 py-1 rounded hover:bg-amber-100 transition-colors"
+              className="text-amber-800 hover:text-amber-950 text-sm px-2.5 py-1 rounded-lg hover:bg-amber-100 transition-colors"
               aria-label="Cỡ chữ"
             >
-              Aa
+              Aa Cỡ chữ
             </button>
             {showSettings && (
               <div className="absolute right-0 top-full mt-1 bg-white border border-[#E5E0D8] rounded-xl shadow-lg p-3 z-50 w-44">
@@ -141,7 +141,12 @@ export default function ReadingLayout({ story, chapter, prevChapter, nextChapter
                 <span className="text-xs text-amber-800/50 mb-1">← Chương trước</span>
                 <span className="text-amber-950 font-medium text-sm line-clamp-2 group-hover:text-amber-700 transition-colors">{prevChapter.title}</span>
               </Link>
-            ) : <div />}
+            ) : (
+              <div className="flex flex-col bg-[#F8F5EF] border border-[#E5E0D8] rounded-xl px-4 py-3 opacity-60">
+                <span className="text-xs text-amber-800/50 mb-1">← Chương trước</span>
+                <span className="text-amber-900/60 font-medium text-sm">Đây là chương đầu</span>
+              </div>
+            )}
 
             <Link href={`/stories/${story.slug}`}
               className="flex items-center justify-center bg-[#8B5E34] text-white rounded-xl text-sm font-medium hover:bg-[#6F4726] transition-colors text-center px-3 py-3">
@@ -154,7 +159,13 @@ export default function ReadingLayout({ story, chapter, prevChapter, nextChapter
                 <span className="text-xs text-amber-800/50 mb-1">Chương sau →</span>
                 <span className="text-amber-950 font-medium text-sm line-clamp-2 group-hover:text-amber-700 transition-colors">{nextChapter.title}</span>
               </Link>
-            ) : <div />}
+            ) : (
+              <div className="flex flex-col bg-[#F8F5EF] border border-[#E5E0D8] rounded-xl px-4 py-3 text-right opacity-80">
+                <span className="text-xs text-amber-800/50 mb-1">Chương sau →</span>
+                <span className="text-amber-900/70 font-medium text-sm">Chưa có chương sau</span>
+                <span className="text-xs text-amber-700/50 mt-1">Theo dõi để nhận chương mới</span>
+              </div>
+            )}
           </div>
         </div>
       </div>

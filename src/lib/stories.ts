@@ -12,6 +12,7 @@ interface GrayMatterResult {
 
 const contentRoot = path.join(process.cwd(), 'content');
 const CHAPTER_FILE_PATTERN = /^chuong-\d+\.md$/;
+const NEW_STORY_WINDOW_DAYS = 14;
 
 function isValidSlug(slug: string): boolean {
   return /^[a-zA-Z0-9_-]+$/.test(slug);
@@ -200,11 +201,37 @@ export async function getAudioStories(): Promise<Story[]> {
 export async function getRecentlyUpdatedStories(limit = 8): Promise<Story[]> {
   const stories = await getAllStories();
   return stories
-    .filter(story => story.updatedAt)
+    .filter(story => story.updatedAt || story.chapters.length > 0)
     .sort((a, b) => {
-      const dateA = new Date(a.updatedAt ?? '').getTime();
-      const dateB = new Date(b.updatedAt ?? '').getTime();
+      const dateA = getLatestStoryUpdateDate(a);
+      const dateB = getLatestStoryUpdateDate(b);
       return dateB - dateA;
     })
     .slice(0, limit);
+}
+
+export async function getNewlyPublishedStories(limit = 8, days = NEW_STORY_WINDOW_DAYS): Promise<Story[]> {
+  const stories = await getAllStories();
+  const cutoff = Date.now() - days * 24 * 60 * 60 * 1000;
+  return stories
+    .filter(story => {
+      const publishedTime = getStoryPublishedDate(story);
+      return publishedTime > 0 && publishedTime >= cutoff;
+    })
+    .sort((a, b) => getStoryPublishedDate(b) - getStoryPublishedDate(a))
+    .slice(0, limit);
+}
+
+function getLatestStoryUpdateDate(story: Story): number {
+  const chapterDates = story.chapters.map(chapter => new Date(chapter.publishedAt).getTime()).filter(Boolean);
+  const latestChapterDate = chapterDates.length > 0 ? Math.max(...chapterDates) : 0;
+  const storyUpdatedAt = story.updatedAt ? new Date(story.updatedAt).getTime() : 0;
+  return Math.max(latestChapterDate, storyUpdatedAt);
+}
+
+function getStoryPublishedDate(story: Story): number {
+  const explicitDate = story.publishedAt ?? story.createdAt;
+  if (explicitDate) return new Date(explicitDate).getTime();
+  const chapterDates = story.chapters.map(chapter => new Date(chapter.publishedAt).getTime()).filter(Boolean);
+  return chapterDates.length > 0 ? Math.min(...chapterDates) : 0;
 }

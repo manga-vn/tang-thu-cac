@@ -60,10 +60,29 @@ export default async function ChapterPage({ params }: PageProps) {
       nextChapter={nextChapter}
     >
       {paragraphs.map((paragraph, index) => (
-        <p key={index} className="mb-6">
-          {paragraph}
-        </p>
+        paragraph.startsWith('```') && paragraph.endsWith('```') ? (
+          <pre key={index} className="mb-6 overflow-x-auto rounded-2xl border border-amber-200 bg-amber-50/70 px-4 py-3 text-sm leading-relaxed text-amber-950/80">
+            <code>{paragraph.replace(/^```\w*\n?/, '').replace(/```$/, '').trim()}</code>
+          </pre>
+        ) : (
+          <p key={index} className="mb-6">
+            {renderInlineCode(paragraph)}
+          </p>
+        )
       ))}
     </ReadingLayout>
   );
+}
+
+function renderInlineCode(text: string) {
+  return text.split(/(`[^`]+`)/g).map((part, index) => {
+    if (part.startsWith('`') && part.endsWith('`')) {
+      return (
+        <code key={index} className="rounded-md bg-amber-100/80 px-1.5 py-0.5 text-[0.9em] font-medium text-amber-900">
+          {part.slice(1, -1)}
+        </code>
+      );
+    }
+    return part;
+  });
 }

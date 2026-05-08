@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { MAIN_GENRES } from '@/data/genres';
 
 export default function Footer() {
   const year = new Date().getFullYear();
@@ -32,9 +33,9 @@ export default function Footer() {
           <div>
             <h4 className="font-semibold text-amber-950 mb-3 text-sm uppercase tracking-wide">Thể loại</h4>
             <ul className="space-y-2">
-              {['Tiên hiệp', 'Huyền huyễn', 'Đô thị', 'Ngôn tình', 'Hài hước'].map(g => (
+              {MAIN_GENRES.slice(0, 5).map(g => (
                 <li key={g}>
-                  <span className="text-amber-800/60 text-sm">{g}</span>
+                  <Link href={`/stories?genre=${encodeURIComponent(g)}`} className="text-amber-800/60 hover:text-amber-900 text-sm transition-colors">{g}</Link>
                 </li>
               ))}
             </ul>
@@ -56,7 +57,7 @@ export default function Footer() {
           <p className="text-amber-800/40 text-xs text-center">
             © {year} Gác Truyện. Tất cả nội dung thuộc quyền sở hữu của tác giả.
           </p>
-          <p className="text-amber-800/40 text-xs italic">"Đọc một chương, ở lại một đời."</p>
+          <p className="text-amber-800/40 text-xs italic">&ldquo;Đọc một chương, ở lại một đời.&rdquo;</p>
         </div>
       </div>
     </footer>

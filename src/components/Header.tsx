@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
+import { FEATURED_GENRES } from '@/data/genres';
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -24,6 +25,28 @@ export default function Header() {
           <Link href="/stories" className="text-amber-800 hover:text-amber-950 transition-colors text-sm font-medium">
             Danh sách truyện
           </Link>
+          <div className="group relative">
+            <button className="text-amber-800 hover:text-amber-950 transition-colors text-sm font-medium py-2">
+              Thể loại
+            </button>
+            <div className="invisible absolute left-1/2 top-full z-50 w-[520px] -translate-x-1/2 pt-2 opacity-0 transition-all group-hover:visible group-hover:opacity-100">
+              <div className="grid grid-cols-2 gap-2 rounded-2xl border border-[#E5E0D8] bg-[#FFFDF8] p-3 shadow-xl">
+                {FEATURED_GENRES.map(genre => (
+                  <Link
+                    key={genre.name}
+                    href={`/stories?genre=${encodeURIComponent(genre.name)}`}
+                    className="flex items-center gap-3 rounded-xl px-3 py-2 hover:bg-amber-50"
+                  >
+                    <span className="text-xl">{genre.emoji}</span>
+                    <span>
+                      <span className="block text-sm font-semibold text-amber-950">{genre.name}</span>
+                      <span className="block text-xs text-amber-800/55">{genre.desc}</span>
+                    </span>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </div>
           <Link href="/audio" className="text-amber-800 hover:text-amber-950 transition-colors text-sm font-medium">
             🎧 Audio
           </Link>
@@ -57,6 +80,21 @@ export default function Header() {
           <Link href="/stories" className="block text-amber-800 hover:text-amber-950 text-sm font-medium py-1" onClick={() => setMenuOpen(false)}>
             Danh sách truyện
           </Link>
+          <div className="rounded-xl bg-amber-50/70 p-3">
+            <p className="mb-2 text-xs font-bold uppercase tracking-wide text-amber-800/60">Thể loại</p>
+            <div className="grid grid-cols-2 gap-2">
+              {FEATURED_GENRES.map(genre => (
+                <Link
+                  key={genre.name}
+                  href={`/stories?genre=${encodeURIComponent(genre.name)}`}
+                  className="rounded-lg bg-white px-2.5 py-2 text-sm font-medium text-amber-800 hover:text-amber-950"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  <span className="mr-1">{genre.emoji}</span>{genre.name}
+                </Link>
+              ))}
+            </div>
+          </div>
           <Link href="/audio" className="block text-amber-800 hover:text-amber-950 text-sm font-medium py-1" onClick={() => setMenuOpen(false)}>
             🎧 Audio
           </Link>

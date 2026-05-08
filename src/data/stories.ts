@@ -24,6 +24,8 @@ export interface Story {
   readCount?: number;
   views?: number;
   rating?: number;
+  publishedAt?: string;
+  createdAt?: string;
   updatedAt?: string;
   chapters: Chapter[];
 }

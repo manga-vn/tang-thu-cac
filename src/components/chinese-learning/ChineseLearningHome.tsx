@@ -37,6 +37,21 @@ export default function ChineseLearningHome() {
           </p>
         </section>
 
+        <section className="mt-5 rounded-3xl border border-amber-200 bg-amber-50/70 p-5 sm:p-7">
+          <h2 className="text-2xl font-bold text-amber-950">Học tiếng Trung từ những cảnh đời sống nhỏ</h2>
+          <div className="mt-3 grid gap-4 text-sm leading-relaxed text-amber-900/75 md:grid-cols-3">
+            <p>
+              Nhiều app học ngoại ngữ khiến việc học bị rời rạc: nhớ vài từ, vài câu đơn lẻ, nhưng đến lúc nói trong nhà hay trong bữa ăn lại không biết đặt câu vào đâu.
+            </p>
+            <p>
+              Gác Truyện thiết kế bài học quanh bối cảnh gia đình, nhóm nhỏ và sinh hoạt hằng ngày: buổi sáng, bữa cơm, khách đến chơi, hỏi thăm người thân.
+            </p>
+            <p>
+              Mỗi bài có hội thoại, từ vựng tách riêng, câu dùng ngay, phát âm, roleplay và một bài tập nhỏ để bạn học mà như không học, rồi dùng được ngay.
+            </p>
+          </div>
+        </section>
+
         <section className="mt-10">
           <div className="mb-4 flex items-end justify-between gap-4">
             <div>

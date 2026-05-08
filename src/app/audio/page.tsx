@@ -20,6 +20,7 @@ export default async function AudioPage() {
           <h1 className="text-3xl md:text-4xl font-bold mb-3">Truyện Audio</h1>
           <p className="text-purple-200/80 max-w-xl mx-auto text-sm leading-relaxed">
             Vừa đọc vừa nghe – trải nghiệm truyện theo cách hoàn toàn mới. Lý tưởng khi di chuyển hoặc muốn thư giãn.
+            Hiện website chưa có audio chính thức; khu này đang được phát triển.
           </p>
         </div>
       </div>

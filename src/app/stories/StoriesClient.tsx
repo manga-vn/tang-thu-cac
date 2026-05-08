@@ -3,20 +3,22 @@
 import { useState, useMemo } from 'react';
 import { Story } from '@/data/stories';
 import StoryCard from '@/components/StoryCard';
+import { MAIN_GENRES } from '@/data/genres';
 
-interface Props { stories: Story[] }
+interface Props {
+  stories: Story[];
+  initialGenre?: string;
+}
 
-const ALL_GENRES = ['Tiên hiệp', 'Huyền huyễn', 'Huyền nghi', 'Đô thị', 'Ngôn tình', 'Tình cảm', 'Nhân quả', 'Bí ẩn', 'Sảng văn', 'Hài hước'];
-
-export default function StoriesClient({ stories }: Props) {
+export default function StoriesClient({ stories, initialGenre = '' }: Props) {
   const [search, setSearch] = useState('');
-  const [selectedGenre, setSelectedGenre] = useState('');
+  const [selectedGenre, setSelectedGenre] = useState(initialGenre);
   const [layout, setLayout] = useState<'grid' | 'list'>('grid');
 
   const allGenres = useMemo(() => {
     const genres = new Set<string>();
     stories.forEach(s => s.genre.forEach(g => genres.add(g)));
-    return ALL_GENRES.filter(g => genres.has(g));
+    return MAIN_GENRES.filter(g => genres.has(g));
   }, [stories]);
 
   const filtered = useMemo(() => {
