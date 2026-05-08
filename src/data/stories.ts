@@ -21,6 +21,7 @@ export interface Story {
   summary?: string;
   featured?: boolean;
   hasAudio?: boolean;
+  readCount?: number;
   views?: number;
   rating?: number;
   updatedAt?: string;
