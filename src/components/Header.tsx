@@ -34,8 +34,8 @@ export default function Header() {
                 {FEATURED_GENRES.map(genre => (
                   <Link
                     key={genre.name}
-                    href={`/stories?genre=${encodeURIComponent(genre.name)}`}
-                    className="flex items-center gap-3 rounded-xl px-3 py-2 hover:bg-amber-50"
+                    href={`/stories?category=${genre.slug}`}
+                    className="flex items-center gap-3 rounded-xl px-3 py-2 hover:bg-amber-50 focus:outline-none focus:ring-2 focus:ring-amber-300"
                   >
                     <span className="text-xl">{genre.emoji}</span>
                     <span>
@@ -86,8 +86,8 @@ export default function Header() {
               {FEATURED_GENRES.map(genre => (
                 <Link
                   key={genre.name}
-                  href={`/stories?genre=${encodeURIComponent(genre.name)}`}
-                  className="rounded-lg bg-white px-2.5 py-2 text-sm font-medium text-amber-800 hover:text-amber-950"
+                  href={`/stories?category=${genre.slug}`}
+                  className="rounded-lg bg-white px-2.5 py-2 text-sm font-medium text-amber-800 hover:text-amber-950 focus:outline-none focus:ring-2 focus:ring-amber-300"
                   onClick={() => setMenuOpen(false)}
                 >
                   <span className="mr-1">{genre.emoji}</span>{genre.name}

@@ -2,7 +2,7 @@ import { getAllStories } from "@/lib/stories";
 import StoriesClient from "./StoriesClient";
 
 interface PageProps {
-  searchParams?: Promise<{ genre?: string }>;
+  searchParams?: Promise<{ category?: string; genre?: string }>;
 }
 
 export const metadata = {
@@ -13,5 +13,5 @@ export const metadata = {
 export default async function StoriesPage({ searchParams }: PageProps) {
   const stories = await getAllStories();
   const query = await searchParams;
-  return <StoriesClient stories={stories} initialGenre={query?.genre ?? ''} />;
+  return <StoriesClient stories={stories} initialCategory={query?.category ?? ''} initialGenre={query?.genre ?? ''} />;
 }

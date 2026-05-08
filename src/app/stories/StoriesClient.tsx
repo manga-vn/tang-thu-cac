@@ -3,16 +3,18 @@
 import { useState, useMemo } from 'react';
 import { Story } from '@/data/stories';
 import StoryCard from '@/components/StoryCard';
-import { MAIN_GENRES } from '@/data/genres';
+import { getGenreBySlug, MAIN_GENRES } from '@/data/genres';
 
 interface Props {
   stories: Story[];
+  initialCategory?: string;
   initialGenre?: string;
 }
 
-export default function StoriesClient({ stories, initialGenre = '' }: Props) {
+export default function StoriesClient({ stories, initialCategory = '', initialGenre = '' }: Props) {
+  const initialGenreName = initialCategory ? getGenreBySlug(initialCategory)?.name ?? '' : initialGenre;
   const [search, setSearch] = useState('');
-  const [selectedGenre, setSelectedGenre] = useState(initialGenre);
+  const [selectedGenre, setSelectedGenre] = useState(initialGenreName);
   const [layout, setLayout] = useState<'grid' | 'list'>('grid');
 
   const allGenres = useMemo(() => {
