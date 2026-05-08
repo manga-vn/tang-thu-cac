@@ -7,8 +7,6 @@ isVip: false
 audioUrl: ""
 ---
 
----
-
 Tôi tìm thấy nhật ký của vợ cũ trong hộp đồ của mẹ.
 
 Không phải tình cờ. Mẹ nhờ tôi dọn phòng kho vì bà sắp sơn lại tường, và tôi thì đang không có việc gì làm vào buổi sáng thứ Bảy đó — bài báo nộp rồi, lịch phỏng vấn hủy, căn hộ của tôi sạch đến mức không còn thứ gì để sắp xếp lại. Tôi đến nhà mẹ lúc chín giờ, pha cà phê, rồi bắt đầu kéo từng thùng carton ra khỏi góc tối.
@@ -180,34 +178,3 @@ Không phải vì không biết phải nói gì. Mà vì cô biết rõ: một k
 Năm năm cô đã xây dựng một cuộc sống bình yên. Không hoàn hảo, nhưng bình yên.
 
 Cô chưa sẵn sàng để nó lung lay.
-
----
-
-## Ghi chú biên tập
-
-**Những điểm đã giữ:**
-- Câu mở nguyên vẹn
-- Toàn bộ cấu trúc xen kẽ hai góc nhìn
-- Dòng đầu nhật ký: *Anh ấy sẽ không bao giờ biết*
-- Gia Hạo nhận xét "nghe nhưng không lắng nghe"
-- Trang 183/182/184 nguyên vẹn
-- Miên chấm bài, nhận tin nhắn, không bắt máy
-- Nhật Minh về và nhận xét "mặt mẹ trông lạ"
-
-**Những điểm đã sửa:**
-- A. Xóa câu "Cô đã xé trang đó từ trước khi ly hôn — xé và đốt, không giữ lại." Thay bằng Miên im lặng, chưa trả lời — giữ bí mật hoàn toàn cho Chương 1
-- B. Cliffhanger đổi: Miên nhắn "Hôm nay tôi bận", Gia Hạo gõ lại "Trang 183", cô im lặng 20 phút rồi... không trả lời. Kết bằng Miên chưa sẵn sàng để cuộc sống lung lay
-- C. Sửa "năm năm không một cuộc gọi, không một tin nhắn" → "năm năm gần như không nói chuyện, chỉ trao đổi những thứ liên quan đến Minh"
-- D. Thêm chi tiết mẹ Gia Hạo: lần đầu nhìn hộp giày rồi hỏi lảng về cà phê; lần sau dừng lại nhìn cuốn sổ một giây rồi vào bếp rửa bát
-
-**Cliffhanger cuối chương:**
-Miên nhận được "Trang 183" từ Gia Hạo, không trả lời. Câu cuối: *Cô chưa sẵn sàng để nó lung lay.* — gợi cô biết gì đó, nhưng không tiết lộ là gì.
-
-**Chi tiết cần nối sang Chương 2:**
-- Miên sẽ phải trả lời hoặc không trả lời → Chương 2 mở bằng cô quyết định phản ứng thế nào
-- Gia Hạo ngồi chờ → có thể mở Chương 2 bằng phía anh, sáng hôm sau điện thoại vẫn không có tin nhắn mới
-- Mẹ Gia Hạo biết cuốn sổ → cần khai thác hoặc giữ làm quân bài sau
-
-**Rủi ro continuity cần kiểm tra:**
-- Nhật Minh 8 tuổi, không biết cha mẹ từng kết hôn — cần nhất quán: cậu gọi Gia Hạo là gì? Chưa xuất hiện trong CH01, cần xác nhận trước CH03-04 khi hai người gặp nhau
-- Miên và Gia Hạo trao đổi qua bà nội / lịch cố định — cần nhất quán trong các chương sau, không để họ đột nhiên có thói quen gọi điện thường xuyên
