@@ -41,3 +41,7 @@ yarn-error.log*
 next-env.d.ts
 
 .vercel
+
+# family-chinese dev-server runtime artifacts
+family-chinese/.vite-dev.*
+family-chinese/.superpowers/

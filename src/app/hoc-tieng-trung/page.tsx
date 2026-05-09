@@ -1,5 +1,5 @@
 import { Metadata } from 'next'
-import ChineseLearningHome from '@/components/chinese-learning/ChineseLearningHome'
+import FamilyChineseClientLoader from '@/components/family-chinese/FamilyChineseClientLoader'
 
 export const metadata: Metadata = {
   title: 'Tiếng Trung Mỗi Ngày – Gác Truyện',
@@ -7,5 +7,5 @@ export const metadata: Metadata = {
 }
 
 export default function HocTiengTrungPage() {
-  return <ChineseLearningHome />
+  return <FamilyChineseClientLoader />
 }
