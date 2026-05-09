@@ -4,9 +4,13 @@
   "slug": "vong-xuyen-diep",
   "author": "Ẩn danh",
   "coverImage": "/images/vong-xuyen-diep-cover.png",
-  "genre": ["Tiên hiệp", "Huyền huyễn", "Nhân quả"],
+  "genre": [
+    "Tiên hiệp",
+    "Huyền huyễn",
+    "Nhân quả"
+  ],
   "status": "Đang viết",
-  "featured": true,
+  "featured": false,
   "hasAudio": false,
   "views": 4800,
   "rating": 4.9,

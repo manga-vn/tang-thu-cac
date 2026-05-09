@@ -1,0 +1,17 @@
+{
+  "id": "nguyen-am",
+  "title": "Nguyên Âm",
+  "slug": "nguyen-am",
+  "author": "Mr Vũ",
+  "coverImage": "/images/nguyen-am-cover.png",
+  "genre": ["Tiên hiệp", "Huyền huyễn", "Âm nhạc tu luyện"],
+  "status": "Đang viết",
+  "featured": true,
+  "hasAudio": false,
+  "views": 0,
+  "rating": 0,
+  "publishedAt": "2026-05-10",
+  "updatedAt": "2026-05-10",
+  "description": "Trong thế giới nơi tu luyện Nguyên Âm là con đường duy nhất đến quyền năng, Thiên Vũ không nghe được gì cả.",
+  "summary": "Nguyên Âm là câu chuyện về một người không có tầng tu luyện trong thế giới mà mọi thứ đều vận hành qua rung động âm thanh. Thiên Vũ sống ở rìa hệ thống — không phải vì bị đánh bại, mà vì chưa bao giờ được đứng vào trong. Cho đến khi cỏ dưới chân hắn bắt đầu không chịu nghiêng theo gió."
+}
