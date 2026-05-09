@@ -38,7 +38,6 @@ export default function StoryCard({ story, layout = 'grid' }: StoryCardProps) {
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3 text-xs text-amber-700/60">
                 <span>📖 {story.chapters.length} chương</span>
-                {story.views && <span>👁 {story.views.toLocaleString('vi-VN')}</span>}
               </div>
               <Link href={`/stories/${story.slug}`}
                 className="bg-[#8B5E34] text-white px-3 py-1.5 rounded-lg text-xs font-medium hover:bg-[#6F4726] transition-colors shrink-0">

@@ -33,9 +33,6 @@ export default function RankingList({ stories }: RankingListProps) {
               {story.title}
             </p>
             <p className="text-amber-800/60 text-xs mt-0.5">{story.author ?? 'Tác giả'}</p>
-            <p className="text-amber-700/60 text-xs mt-1">
-              {(story.views ?? 0).toLocaleString('vi-VN')} lượt đọc
-            </p>
           </div>
           {story.rating && (
             <span className="text-xs text-amber-600 font-semibold shrink-0">★ {story.rating}</span>

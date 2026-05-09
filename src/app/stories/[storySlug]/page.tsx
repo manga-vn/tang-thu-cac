@@ -33,7 +33,6 @@ export default async function StoryDetailPage({ params }: PageProps) {
 
   const latestChapter = story.chapters[story.chapters.length - 1];
   const firstChapter = story.chapters[0];
-  const readCount = story.readCount ?? story.views;
 
   return (
     <div className="min-h-screen bg-[#F8F5EF]">
@@ -79,12 +78,6 @@ export default async function StoryDetailPage({ params }: PageProps) {
                   <p className="font-bold text-amber-950 text-lg">{story.chapters.length}</p>
                   <p className="text-amber-700/60 text-xs">Chương</p>
                 </div>
-                {readCount ? (
-                  <div className="text-center">
-                    <p className="font-bold text-amber-950 text-lg">{readCount.toLocaleString('vi-VN')}</p>
-                    <p className="text-amber-700/60 text-xs">Lượt đọc</p>
-                  </div>
-                ) : null}
                 {story.updatedAt && (
                   <div className="text-center">
                     <p className="font-bold text-amber-950 text-lg">
