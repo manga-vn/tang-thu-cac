@@ -83,7 +83,13 @@ export default function WordList({ vocabulary, allTags, onDelete, isAdmin, getWo
                   {w.tags?.length > 0 && (
                     <div className="flex flex-wrap gap-1 mt-1.5">
                       {w.tags.map(t => (
-                        <span key={t} className="text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full">{t}</span>
+                        <button
+                          key={t}
+                          onClick={() => setTag(t)}
+                          className="text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full active:scale-95"
+                        >
+                          {t}
+                        </button>
                       ))}
                     </div>
                   )}

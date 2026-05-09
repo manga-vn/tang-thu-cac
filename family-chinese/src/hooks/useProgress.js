@@ -36,18 +36,21 @@ export function useProgress(userId) {
       .map(([wordId, v]) => ({ wordId, ...v }))
   }, [progress])
 
-  // Summary: { remembered, notYet, unseen } for current user across all words
-  const getSummary = useCallback((vocabulary) => {
-    const userP = progress[userId] || {}
+  const getSummaryForUser = useCallback((uid, vocabulary) => {
     let remembered = 0, notYet = 0, unseen = 0
     vocabulary.forEach(w => {
-      const s = userP[w.id]?.status
+      const s = (progress[uid] || {})[w.id]?.status
       if (s === 'remembered') remembered++
       else if (s === 'not_yet') notYet++
       else unseen++
     })
     return { remembered, notYet, unseen }
-  }, [progress, userId])
+  }, [progress])
 
-  return { progress, markWord, getWordStatus, getTodayReviewed, getSummary }
+  // Summary: { remembered, notYet, unseen } for current user across all words
+  const getSummary = useCallback((vocabulary) => {
+    return getSummaryForUser(userId, vocabulary)
+  }, [getSummaryForUser, userId])
+
+  return { progress, markWord, getWordStatus, getTodayReviewed, getSummary, getSummaryForUser }
 }

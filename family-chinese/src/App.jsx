@@ -10,23 +10,16 @@ import { useVocabulary } from './hooks/useVocabulary'
 import { useProgress } from './hooks/useProgress'
 import { getCurrentProfile, clearProfile } from './utils/storage'
 import { getCurrentStudyDay, getUnlockedVocabulary } from './utils/studyAccess'
-
-const PROFILES_MAP = {
-  cha:  { id: 'cha',  label: 'Cha',   emoji: '👨', isAdmin: true  },
-  con1: { id: 'con1', label: 'Con 1', emoji: '👦', isAdmin: false },
-  con2: { id: 'con2', label: 'Con 2', emoji: '👧', isAdmin: false },
-}
+import { getFamilyProfiles } from './utils/familyProfiles'
 
 export default function App() {
-  const [profile, setProfile] = useState(() => {
-    const saved = getCurrentProfile()
-    return saved ? (PROFILES_MAP[saved] || null) : null
-  })
-
+  const [profiles, setProfiles] = useState(() => getFamilyProfiles())
+  const [profileId, setProfileId] = useState(() => getCurrentProfile())
   const [tab, setTab] = useState('dashboard')
+  const profile = profiles.find((item) => item.id === profileId) || null
 
   const { vocabulary, addWord, deleteWord, allTags } = useVocabulary()
-  const { markWord, getWordStatus, getTodayReviewed, getSummary } = useProgress(profile?.id || 'cha')
+  const { markWord, getWordStatus, getTodayReviewed, getSummary, getSummaryForUser } = useProgress(profile?.id || 'cha')
   const studyDay = getCurrentStudyDay()
   const unlockedVocabulary = useMemo(() => getUnlockedVocabulary(vocabulary, studyDay), [vocabulary, studyDay])
   const unlockedTags = useMemo(
@@ -35,12 +28,17 @@ export default function App() {
   )
 
   if (!profile) {
-    return <ProfilePicker onSelect={setProfile} />
+    return (
+      <ProfilePicker
+        onSelect={(nextProfile) => setProfileId(nextProfile.id)}
+        onProfilesChange={setProfiles}
+      />
+    )
   }
 
   function handleSwitchProfile() {
     clearProfile()
-    setProfile(null)
+    setProfileId(null)
     setTab('dashboard')
   }
 
@@ -54,10 +52,12 @@ export default function App() {
         {tab === 'dashboard' && (
           <Dashboard
             profile={profile}
+            profiles={profiles}
             vocabulary={unlockedVocabulary}
             studyDay={studyDay}
             getTodayReviewed={getTodayReviewed}
             getSummary={getSummary}
+            getSummaryForUser={getSummaryForUser}
             onTab={setTab}
             onSwitchProfile={handleSwitchProfile}
           />

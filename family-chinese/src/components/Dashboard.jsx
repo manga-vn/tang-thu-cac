@@ -1,20 +1,35 @@
-import { PROFILES } from './ProfilePicker'
 import { todayStr } from '../utils/storage'
 
-export default function Dashboard({ profile, vocabulary, studyDay, getTodayReviewed, getSummary, onTab, onSwitchProfile }) {
+export default function Dashboard({
+  profile,
+  profiles,
+  vocabulary,
+  studyDay,
+  getTodayReviewed,
+  getSummary,
+  getSummaryForUser,
+  onTab,
+  onSwitchProfile,
+}) {
   const today = todayStr()
   const recent = vocabulary.slice(0, 5)
   const summary = getSummary(vocabulary)
   const total = vocabulary.length
+  const myScore = calculateScore(summary, total)
 
   // Per-user today stats
-  const userStats = PROFILES.map(p => {
+  const userStats = profiles.map(p => {
     const reviewed = getTodayReviewed(p.id)
+    const userSummary = getSummaryForUser(p.id, vocabulary)
     const remembered = reviewed.filter(r => r.status === 'remembered').length
-    return { ...p, reviewedCount: reviewed.length, remembered }
+    return {
+      ...p,
+      reviewedCount: reviewed.length,
+      remembered,
+      score: calculateScore(userSummary, total),
+      summary: userSummary,
+    }
   })
-
-  const profileInfo = PROFILES.find(p => p.id === profile.id)
 
   return (
     <div className="flex flex-col gap-4 p-4 pb-24">
@@ -23,7 +38,7 @@ export default function Dashboard({ profile, vocabulary, studyDay, getTodayRevie
       <div className="flex items-center justify-between pt-2">
         <div>
           <h2 className="text-lg font-bold text-gray-800">
-            {profileInfo?.emoji} Xin chào, {profile.label}!
+            {profile.emoji} Xin chào, {profile.label}!
           </h2>
           <p className="text-xs text-gray-400">{today}</p>
         </div>
@@ -42,6 +57,15 @@ export default function Dashboard({ profile, vocabulary, studyDay, getTodayRevie
           <Stat value={summary.remembered} label="Nhớ rồi" />
           <Stat value={summary.notYet}     label="Chưa nhớ" />
           <Stat value={summary.unseen}     label="Chưa ôn" />
+        </div>
+        <div className="mt-4 rounded-2xl bg-white/15 p-3">
+          <div className="flex items-center justify-between">
+            <span className="text-sm font-semibold text-white/80">Điểm tiến độ</span>
+            <span className="text-2xl font-black">{myScore}</span>
+          </div>
+          <div className="mt-2 h-2 overflow-hidden rounded-full bg-white/20">
+            <div className="h-full rounded-full bg-white" style={{ width: `${myScore}%` }} />
+          </div>
         </div>
         <button
           onClick={() => onTab('lessons')}
@@ -73,7 +97,12 @@ export default function Dashboard({ profile, vocabulary, studyDay, getTodayRevie
 
       {/* Family status */}
       <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
-        <h3 className="font-semibold text-gray-700 mb-3 text-sm">Gia đình hôm nay</h3>
+        <div className="mb-3 flex items-center justify-between">
+          <h3 className="font-semibold text-gray-700 text-sm">Gia đình hôm nay</h3>
+          <button onClick={onSwitchProfile} className="text-xs font-semibold text-red-500">
+            Sửa thành viên
+          </button>
+        </div>
         <div className="flex flex-col gap-2.5">
           {userStats.map(u => (
             <div key={u.id} className="flex items-center gap-3">
@@ -81,14 +110,18 @@ export default function Dashboard({ profile, vocabulary, studyDay, getTodayRevie
               <div className="flex-1">
                 <div className="flex justify-between items-center">
                   <span className="text-sm font-medium text-gray-700">{u.label}</span>
-                  <span className={`text-xs font-semibold ${u.reviewedCount > 0 ? 'text-green-600' : 'text-gray-300'}`}>
-                    {u.reviewedCount > 0 ? `✓ ${u.reviewedCount} từ` : 'Chưa ôn'}
+                  <span className="text-xs font-semibold text-gray-500">
+                    {u.score} điểm
                   </span>
                 </div>
-                <div className="mt-1 h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                <div className="mt-1 flex items-center justify-between gap-3 text-[11px] text-gray-400">
+                  <span>{u.reviewedCount > 0 ? `✓ ${u.reviewedCount} từ hôm nay` : 'Chưa ôn hôm nay'}</span>
+                  <span>{u.summary.remembered}/{total} nhớ</span>
+                </div>
+                <div className="mt-1.5 h-1.5 bg-gray-100 rounded-full overflow-hidden">
                   <div
                     className="h-full bg-green-400 rounded-full transition-all"
-                    style={{ width: total > 0 ? `${Math.min(100, (u.remembered / total) * 100)}%` : '0%' }}
+                    style={{ width: `${u.score}%` }}
                   />
                 </div>
               </div>
@@ -133,6 +166,11 @@ export default function Dashboard({ profile, vocabulary, studyDay, getTodayRevie
       )}
     </div>
   )
+}
+
+function calculateScore(summary, total) {
+  if (!total) return 0
+  return Math.round(((summary.remembered + summary.notYet * 0.35) / total) * 100)
 }
 
 function Stat({ value, label }) {
