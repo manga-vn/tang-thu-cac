@@ -51,14 +51,23 @@ export function canUseSpeechRecognition() {
   return Boolean(getSpeechRecognitionConstructor())
 }
 
-export function speakChinese(text) {
+export function getChineseSpeechSettings(mode = 'normal') {
+  return {
+    lang: 'zh-CN',
+    pitch: 1,
+    rate: mode === 'slow' ? 0.58 : 0.88,
+  }
+}
+
+export function speakChinese(text, options = {}) {
   if (typeof window === 'undefined' || !window.speechSynthesis || !text) return false
 
   window.speechSynthesis.cancel()
   const utterance = new SpeechSynthesisUtterance(text)
-  utterance.lang = 'zh-CN'
-  utterance.rate = 0.82
-  utterance.pitch = 1
+  const settings = getChineseSpeechSettings(options.mode)
+  utterance.lang = settings.lang
+  utterance.rate = settings.rate
+  utterance.pitch = settings.pitch
   window.speechSynthesis.speak(utterance)
   return true
 }

@@ -1,6 +1,6 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import { normalizeSpeechText, scoreSpeechMatch, getScoreFeedback } from './speechPractice.js'
+import { normalizeSpeechText, scoreSpeechMatch, getScoreFeedback, getChineseSpeechSettings } from './speechPractice.js'
 
 test('normalizeSpeechText lowercases text and removes tone marks and punctuation', () => {
   assert.equal(normalizeSpeechText('Wǒ yào shuǐ!'), 'wo yao shui')
@@ -25,4 +25,13 @@ test('getScoreFeedback maps scores to simple learner-facing feedback', () => {
   assert.equal(getScoreFeedback(90).label, 'Rất tốt')
   assert.equal(getScoreFeedback(70).label, 'Đạt phản xạ')
   assert.equal(getScoreFeedback(45).label, 'Thử lại')
+})
+
+test('getChineseSpeechSettings supports normal and slow listening modes', () => {
+  const normal = getChineseSpeechSettings()
+  const slow = getChineseSpeechSettings('slow')
+
+  assert.equal(normal.lang, 'zh-CN')
+  assert.equal(slow.lang, 'zh-CN')
+  assert.ok(slow.rate < normal.rate)
 })

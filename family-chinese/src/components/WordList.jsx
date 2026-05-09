@@ -89,13 +89,22 @@ export default function WordList({ vocabulary, allTags, onDelete, isAdmin, getWo
                   )}
                 </div>
 
-                <button
-                  onClick={() => speakChinese(w.example || w.phrase || w.chinese)}
-                  className="flex-shrink-0 w-10 h-10 rounded-full bg-red-50 text-red-600 border border-red-100 flex items-center justify-center active:scale-95"
-                  aria-label={`Nghe phát âm ${w.pinyin || w.chinese}`}
-                >
-                  🔊
-                </button>
+                <div className="flex-shrink-0 grid gap-1">
+                  <button
+                    onClick={() => speakChinese(w.example || w.phrase || w.chinese)}
+                    className="w-10 h-10 rounded-full bg-red-50 text-red-600 border border-red-100 flex items-center justify-center active:scale-95"
+                    aria-label={`Nghe phát âm bình thường ${w.pinyin || w.chinese}`}
+                  >
+                    🔊
+                  </button>
+                  <button
+                    onClick={() => speakChinese(w.example || w.phrase || w.chinese, { mode: 'slow' })}
+                    className="w-10 h-8 rounded-full bg-blue-50 text-blue-700 border border-blue-100 text-xs font-bold active:scale-95"
+                    aria-label={`Nghe phát âm chậm ${w.pinyin || w.chinese}`}
+                  >
+                    Chậm
+                  </button>
+                </div>
 
                 {isAdmin && (
                   <button

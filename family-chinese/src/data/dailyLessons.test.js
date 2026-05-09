@@ -31,6 +31,29 @@ test('seeded vocabulary contains enough short daily-life speaking items with pin
   }
 })
 
+test('first week starts with family names and numbers before daily routines', () => {
+  assert.equal(dailyLessonStages[0].id, 'family')
+  assert.equal(dailyLessonStages[1].id, 'numbers')
+
+  const firstWeekIds = getDailyStudyPlan().slice(0, 7).flatMap((day) => day.items.map((item) => item.id))
+  assert.ok(firstWeekIds.includes('seed-family-ba-ba'))
+  assert.ok(firstWeekIds.includes('seed-family-ma-ma'))
+  assert.ok(firstWeekIds.includes('seed-family-a-yi'))
+  assert.ok(firstWeekIds.includes('seed-numbers-shi-er'))
+})
+
+test('daily routine examples use natural contextual sentences', () => {
+  const allItems = dailyLessonStages.flatMap((stage) => stage.items)
+  const drinkWater = allItems.find((item) => item.id === 'seed-morning-he-shui')
+  const brushTeeth = allItems.find((item) => item.id === 'seed-morning-shua-ya')
+  const closeDoor = allItems.find((item) => item.id === 'seed-morning-guan-men')
+
+  assert.equal(drinkWater.phrase, '我要喝水。')
+  assert.equal(drinkWater.phraseMeaning, 'Con muốn uống nước.')
+  assert.equal(brushTeeth.phraseMeaning, 'Vũ đánh răng chưa?')
+  assert.equal(closeDoor.phraseMeaning, 'Bố đóng cửa lại nhé.')
+})
+
 test('learning roadmap covers three months of outcomes', () => {
   assert.equal(learningRoadmap.length, 3)
   assert.ok(learningRoadmap.some((item) => item.title.includes('Tháng 1')))

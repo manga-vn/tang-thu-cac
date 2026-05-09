@@ -68,10 +68,11 @@ export default function App() {
             getWordStatus={getWordStatus}
             markWord={markWord}
             profile={profile}
+            onBack={() => setTab('dashboard')}
           />
         )}
         {tab === 'lessons' && (
-          <DailyLessons />
+          <DailyLessons onBack={() => setTab('dashboard')} />
         )}
         {tab === 'wordlist' && (
           <WordList

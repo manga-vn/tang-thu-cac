@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react'
 import { speakChinese } from '../utils/speechPractice'
 
-export default function Flashcard({ vocabulary, getWordStatus, markWord, profile }) {
+export default function Flashcard({ vocabulary, getWordStatus, markWord, profile, onBack }) {
   // Only show unseen + not_yet words first, then remembered
   const deck = useMemo(() => {
     const unseen   = vocabulary.filter(w => getWordStatus(w.id) === 'unseen')
@@ -59,15 +59,24 @@ export default function Flashcard({ vocabulary, getWordStatus, markWord, profile
     }
   }
 
-  function handleSpeak(e, text) {
+  function handleSpeak(e, text, mode = 'normal') {
     e.stopPropagation()
-    speakChinese(text)
+    speakChinese(text, { mode })
   }
 
   const currentStatus = getWordStatus(word.id)
 
   return (
     <div className="flex flex-col min-h-screen pb-28">
+      <div className="px-4 pt-4">
+        <button
+          onClick={onBack}
+          className="inline-flex items-center rounded-full border border-gray-200 bg-white px-4 py-2 text-sm font-semibold text-gray-600 active:scale-95"
+        >
+          ← Hôm nay
+        </button>
+      </div>
+
       {/* Progress bar */}
       <div className="px-4 pt-4 pb-2">
         <div className="flex justify-between text-xs text-gray-400 mb-1.5">
@@ -90,13 +99,22 @@ export default function Flashcard({ vocabulary, getWordStatus, markWord, profile
             {/* Front */}
             <div className="card-front bg-white rounded-3xl shadow-lg border border-gray-100 p-8">
               <p className="text-6xl font-bold text-gray-800 mb-2">{word.chinese}</p>
-              <button
-                onClick={(e) => handleSpeak(e, word.chinese)}
-                className="mt-4 inline-flex items-center gap-2 rounded-full bg-red-50 px-4 py-2 text-sm font-semibold text-red-600 border border-red-100 active:scale-95"
-                aria-label="Nghe phát âm"
-              >
-                🔊 Phát âm
-              </button>
+              <div className="mt-4 grid grid-cols-2 gap-2">
+                <button
+                  onClick={(e) => handleSpeak(e, word.chinese)}
+                  className="rounded-full bg-red-50 px-3 py-2 text-xs font-semibold text-red-600 border border-red-100 active:scale-95"
+                  aria-label="Nghe phát âm bình thường"
+                >
+                  🔊 Thường
+                </button>
+                <button
+                  onClick={(e) => handleSpeak(e, word.chinese, 'slow')}
+                  className="rounded-full bg-blue-50 px-3 py-2 text-xs font-semibold text-blue-700 border border-blue-100 active:scale-95"
+                  aria-label="Nghe phát âm chậm"
+                >
+                  ⏱ Chậm
+                </button>
+              </div>
               {!flipped && <p className="text-sm text-gray-300 mt-4">Nhấn để xem nghĩa</p>}
             </div>
 
@@ -107,13 +125,22 @@ export default function Flashcard({ vocabulary, getWordStatus, markWord, profile
               {word.example && (
                 <p className="text-sm opacity-70 italic mt-3 border-t border-white/20 pt-3">{word.example}</p>
               )}
-              <button
-                onClick={(e) => handleSpeak(e, word.example || word.chinese)}
-                className="mt-4 inline-flex items-center gap-2 rounded-full bg-white/15 px-4 py-2 text-sm font-semibold text-white border border-white/20 active:scale-95"
-                aria-label="Nghe câu mẫu"
-              >
-                🔊 Nghe mẫu
-              </button>
+              <div className="mt-4 grid grid-cols-2 gap-2">
+                <button
+                  onClick={(e) => handleSpeak(e, word.example || word.chinese)}
+                  className="rounded-full bg-white/15 px-3 py-2 text-xs font-semibold text-white border border-white/20 active:scale-95"
+                  aria-label="Nghe câu mẫu bình thường"
+                >
+                  🔊 Thường
+                </button>
+                <button
+                  onClick={(e) => handleSpeak(e, word.example || word.chinese, 'slow')}
+                  className="rounded-full bg-white/15 px-3 py-2 text-xs font-semibold text-white border border-white/20 active:scale-95"
+                  aria-label="Nghe câu mẫu chậm"
+                >
+                  ⏱ Chậm
+                </button>
+              </div>
             </div>
           </div>
         </div>
