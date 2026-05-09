@@ -176,3 +176,11 @@ Tần Vô Thương ngồi dậy. Mặc áo lại. Nhìn về phía cửa, về p
 Mười bảy năm nay hắn là đứa không có Linh Căn.
 
 Hôm nay — hắn không chắc điều đó còn đúng nữa.
+
+Vệt máu dưới lớp áo vẫn còn kéo về phía sau thôn.
+
+Không mạnh.
+
+Nhưng không dừng.
+
+Tần Vô Thương nhìn con đường xanh tái ngoài cửa. Nếu hắn không đi tới Vong Xuyên Khê trước khi trời sáng hẳn, lần sau thứ bị kéo đi có lẽ sẽ không chỉ là máu.

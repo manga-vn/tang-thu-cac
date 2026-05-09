@@ -127,6 +127,8 @@ Tần Vô Thương nhìn hắn.
 
 Hắn dừng một nhịp, như để từng câu đóng xuống.
 
+"Ba đêm đầu, tên ngươi chỉ treo ở Hắc Trúc. Qua ba đêm không thêm chuyện, chấp sự mới quyết định ghi ngươi vào sổ nào."
+
 "Nếu nghe ai gọi tên trong đêm, không đáp."
 
 "Nếu thấy chữ hiện trên vách?" Tần Vô Thương hỏi.

@@ -575,6 +575,8 @@ Chữ không thành hình đẹp. Chỉ đủ để chính hắn biết mình đ
 
 Hắn nhìn nét khắc ấy trong bóng tối.
 
+Nếu sáng mai hắn nhìn chữ này mà không hiểu vì sao mình khắc, hắn sẽ biết chiếc ô đã mất thêm một phần.
+
 Rồi nhắm mắt lại lần nữa.
 
 Trong mưa, chiếc ô vẫn còn đó.

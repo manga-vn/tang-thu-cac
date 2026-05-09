@@ -145,7 +145,7 @@ Lão ngẩng đầu. Mắt ông có gì đó thay đổi — không ngạc nhiê
 
 Ông dừng.
 
-"Trước khi Duyên Căn bắt đầu," hắn nói thay.
+"Trước khi chuyện trong ngực ta bắt đầu," hắn nói thay.
 
 "Ừ."
 
@@ -249,18 +249,10 @@ Con đường ra khỏi Thanh Nhai chạy về phía đông, xuống sườn nú
 
 Vô Tướng Môn không nhận người không Linh Căn.
 
-Hắn biết. Cũng biết rằng mình không đến đó để xin nhập môn. Hắn đến vì người năm xưa từng ở đó. Vì Duyên Căn — thứ hắn đang mang — liên quan đến người đó. Vì trên đá dưới lòng Vong Xuyên Khê có chữ không ai đọc được, nhưng hắn đọc được.
+Hắn biết. Cũng biết rằng mình không đến đó để xin nhập môn. Hắn đến vì người năm xưa từng ở đó. Vì thứ trong ngực hắn liên quan đến người đó. Vì trên đá dưới lòng Vong Xuyên Khê có chữ không ai đọc được, nhưng hắn đọc được.
 
 Và vì trong tay hắn bây giờ có một sợi chỉ đỏ của người tên Diệp Linh Lung.
 
 Hắn không biết mình đang đi tìm gì. Chỉ biết: ở lại thôn này, hắn sẽ không bao giờ biết được.
 
 Ngực hắn không rung. Lặng im, như đang chờ.
-
----
-
-*Ghi chú biên tập (v3 — sửa canon):*
-- *Diệp Linh Lung được xác lập là "không thuộc về Thanh Nhai thôn", "không chắc có thể chết" — đúng hướng Nguyên Duyên, không gợi huyết thống hay người thường.*
-- *Sợi chỉ đỏ do mẹ TVT trao — chi tiết mới, chưa có trong STORY_BIBLE/CHARACTER_BIBLE. Cần xác nhận chốt.*
-- *"Diệp Linh Lung từng ở Vô Tướng Môn" — chi tiết mới, cần xác nhận.*
-- *Dị tượng khe (nước ngừng, tên hiện trên mặt nước) — lần đầu Duyên Căn biểu hiện ra ngoài thân thể TVT, hợp với cảnh giới Tri Duyên.*

@@ -25,6 +25,12 @@ Từ lúc bước khỏi cổng nhà, vết thương tròn ở giữa ngực kh�
 
 Đường Đông Sơn bắt đầu từ cuối dốc sau Thanh Nhai, vòng qua ba khe đá, đi men theo một triền núi dài rồi đổ xuống trấn Đông Sơn. Qua khỏi trấn, đường mới tách ra: một nhánh đi chợ lớn, một nhánh dẫn về vùng khảo hạch của Vô Tướng Môn.
 
+Hắn không cần cả môn phái mở cửa.
+
+Chỉ cần một kẽ hở đủ để hỏi về cái tên Diệp Linh Lung.
+
+Nếu kẽ hở ấy cũng không có, con đường này sẽ đứt ngay trước cổng núi.
+
 Ngày nhỏ, hắn từng theo cha đi bán củi trên con đường này. Khi đó đường chỉ là đường. Có bùn sau mưa, có đá làm trầy gót, có mấy cây hồng dại đến mùa thì đỏ quả. Đi qua hết đoạn dốc là tới chợ. Chợ có tiếng người, có bánh nóng, có vải thô, có muối.
 
 Bây giờ cũng con đường ấy.
