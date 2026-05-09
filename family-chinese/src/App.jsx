@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import ProfilePicker from './components/ProfilePicker'
 import Navigation from './components/Navigation'
 import Dashboard from './components/Dashboard'
@@ -9,6 +9,7 @@ import Flashcard from './components/Flashcard'
 import { useVocabulary } from './hooks/useVocabulary'
 import { useProgress } from './hooks/useProgress'
 import { getCurrentProfile, clearProfile } from './utils/storage'
+import { getCurrentStudyDay, getUnlockedVocabulary } from './utils/studyAccess'
 
 const PROFILES_MAP = {
   cha:  { id: 'cha',  label: 'Cha',   emoji: '👨', isAdmin: true  },
@@ -26,6 +27,12 @@ export default function App() {
 
   const { vocabulary, addWord, deleteWord, allTags } = useVocabulary()
   const { markWord, getWordStatus, getTodayReviewed, getSummary } = useProgress(profile?.id || 'cha')
+  const studyDay = getCurrentStudyDay()
+  const unlockedVocabulary = useMemo(() => getUnlockedVocabulary(vocabulary, studyDay), [vocabulary, studyDay])
+  const unlockedTags = useMemo(
+    () => [...new Set(unlockedVocabulary.flatMap((word) => word.tags || []))].sort(),
+    [unlockedVocabulary],
+  )
 
   if (!profile) {
     return <ProfilePicker onSelect={setProfile} />
@@ -47,7 +54,8 @@ export default function App() {
         {tab === 'dashboard' && (
           <Dashboard
             profile={profile}
-            vocabulary={vocabulary}
+            vocabulary={unlockedVocabulary}
+            studyDay={studyDay}
             getTodayReviewed={getTodayReviewed}
             getSummary={getSummary}
             onTab={setTab}
@@ -56,7 +64,7 @@ export default function App() {
         )}
         {tab === 'flashcard' && (
           <Flashcard
-            vocabulary={vocabulary}
+            vocabulary={unlockedVocabulary}
             getWordStatus={getWordStatus}
             markWord={markWord}
             profile={profile}
@@ -67,8 +75,8 @@ export default function App() {
         )}
         {tab === 'wordlist' && (
           <WordList
-            vocabulary={vocabulary}
-            allTags={allTags}
+            vocabulary={unlockedVocabulary}
+            allTags={unlockedTags}
             onDelete={deleteWord}
             isAdmin={profile.isAdmin}
             getWordStatus={getWordStatus}

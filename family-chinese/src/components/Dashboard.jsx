@@ -1,7 +1,7 @@
 import { PROFILES } from './ProfilePicker'
 import { todayStr } from '../utils/storage'
 
-export default function Dashboard({ profile, vocabulary, getTodayReviewed, getSummary, onTab, onSwitchProfile }) {
+export default function Dashboard({ profile, vocabulary, studyDay, getTodayReviewed, getSummary, onTab, onSwitchProfile }) {
   const today = todayStr()
   const recent = vocabulary.slice(0, 5)
   const summary = getSummary(vocabulary)
@@ -37,17 +37,17 @@ export default function Dashboard({ profile, vocabulary, getTodayReviewed, getSu
 
       {/* My progress today */}
       <div className="bg-gradient-to-r from-red-600 to-red-500 rounded-2xl p-5 text-white shadow">
-        <p className="text-sm opacity-80 mb-3">Tiến độ của tôi hôm nay</p>
+        <p className="text-sm opacity-80 mb-3">Tiến độ của tôi hôm nay - ngày {studyDay}</p>
         <div className="flex gap-4">
           <Stat value={summary.remembered} label="Nhớ rồi" />
           <Stat value={summary.notYet}     label="Chưa nhớ" />
           <Stat value={summary.unseen}     label="Chưa ôn" />
         </div>
         <button
-          onClick={() => onTab('flashcard')}
+          onClick={() => onTab('lessons')}
           className="mt-4 w-full bg-white text-red-600 font-semibold rounded-xl py-2.5 text-sm hover:bg-red-50 transition-colors"
         >
-          Bắt đầu ôn bài →
+          Học bài hôm nay →
         </button>
       </div>
 
@@ -103,7 +103,7 @@ export default function Dashboard({ profile, vocabulary, getTodayReviewed, getSu
           <div className="flex justify-between items-center mb-3">
             <h3 className="font-semibold text-gray-700 text-sm">Từ mới nhất</h3>
             <button onClick={() => onTab('wordlist')} className="text-xs text-red-500 hover:text-red-700">
-              Xem tất cả →
+              Xem từ đã mở →
             </button>
           </div>
           <div className="flex flex-col gap-2">

@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { dailyLessonStages, getDailyStudyPlan, getItemPracticeGoals, learningRoadmap } from '../data/dailyLessons'
 import {
   getScoreFeedback,
@@ -27,20 +27,25 @@ export default function DailyLessons() {
   const [itemIndex, setItemIndex] = useState(0)
   const [isListening, setIsListening] = useState(false)
   const [practice, setPractice] = useState(null)
+  const [activeLesson, setActiveLesson] = useState(null)
+  const practiceRef = useRef(null)
 
   const stage = useMemo(
     () => dailyLessonStages.find((item) => item.id === stageId) || dailyLessonStages[0],
     [stageId],
   )
-  const current = stage.items[itemIndex] || stage.items[0]
+  const practiceItems = activeLesson?.items || stage.items
+  const current = practiceItems[itemIndex] || practiceItems[0]
   const currentGoals = getItemPracticeGoals(current)
   const selectedDay = dailyPlan[planDayIndex]
-  const progress = Math.round(((itemIndex + 1) / stage.items.length) * 100)
+  const progress = Math.round(((itemIndex + 1) / practiceItems.length) * 100)
 
   function startSelectedDay() {
     setStageId(selectedDay.stageId)
-    setItemIndex(selectedDay.itemStartIndex)
+    setActiveLesson(selectedDay)
+    setItemIndex(0)
     setPractice(null)
+    setTimeout(() => practiceRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 0)
   }
 
   function movePlanDay(direction) {
@@ -49,17 +54,19 @@ export default function DailyLessons() {
 
   function chooseStage(nextStageId) {
     setStageId(nextStageId)
+    setActiveLesson(null)
     setItemIndex(0)
     setPractice(null)
   }
 
   function chooseItem(index) {
+    setActiveLesson(null)
     setItemIndex(index)
     setPractice(null)
   }
 
   function nextItem() {
-    setItemIndex((index) => (index + 1) % stage.items.length)
+    setItemIndex((index) => (index + 1) % practiceItems.length)
     setPractice(null)
   }
 
@@ -234,14 +241,14 @@ export default function DailyLessons() {
         ))}
       </div>
 
-      <section className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 mb-4">
+      <section ref={practiceRef} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 mb-4 scroll-mt-4">
         <div className="flex items-start justify-between gap-3">
           <div>
-            <p className="text-xs text-gray-400">{stage.focus}</p>
-            <h3 className="text-xl font-black text-gray-900 mt-1">{stage.title}</h3>
+            <p className="text-xs text-gray-400">{activeLesson?.focus || stage.focus}</p>
+            <h3 className="text-xl font-black text-gray-900 mt-1">{activeLesson?.title || stage.title}</h3>
           </div>
           <span className="text-xs font-semibold text-red-600 bg-red-50 rounded-full px-3 py-1">
-            {itemIndex + 1}/{stage.items.length}
+            {itemIndex + 1}/{practiceItems.length}
           </span>
         </div>
         <div className="h-2 bg-gray-100 rounded-full overflow-hidden mt-4">
@@ -347,10 +354,17 @@ export default function DailyLessons() {
       <section className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
         <h3 className="font-bold text-gray-800 mb-3">Các câu trong bài</h3>
         <div className="grid gap-2">
-          {stage.items.map((item, index) => (
+          {practiceItems.map((item, index) => (
             <button
               key={item.id}
-              onClick={() => chooseItem(index)}
+              onClick={() => {
+                if (activeLesson) {
+                  setItemIndex(index)
+                  setPractice(null)
+                } else {
+                  chooseItem(index)
+                }
+              }}
               className={`text-left rounded-xl border px-3 py-3 transition-colors ${
                 index === itemIndex
                   ? 'border-red-200 bg-red-50'
