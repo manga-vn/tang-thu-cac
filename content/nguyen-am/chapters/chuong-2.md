@@ -179,9 +179,11 @@ Thiên Vũ đọc từ đầu trang. Hòa Âm đỉnh, Hòa Âm trung kỳ, xu�
 
 Gần cuối tờ giấy, sau danh sách chính, là một cột nhỏ hơn ghi chú phía dưới. Những cái tên không đủ điều kiện. Tên Thiên Vũ ở dòng thứ ba, bên cạnh hai chữ: Không tầng.
 
-Hắn đọc. Không đứng lâu. Bước ra.
+Phúc Lâm thấy cùng lúc với hắn. Hắn ta đưa tay vào túi áo, nơi có cái thẻ tre. Rồi không rút ra.
 
-Phúc Lâm nhìn theo. Không nói gì.
+Thiên Vũ đọc. Không đứng lâu. Bước ra.
+
+Phúc Lâm rút tay khỏi túi. Đi theo. Không nói gì.
 
 Tên Phúc Lâm ở cuối danh sách chính.
 
@@ -194,24 +196,28 @@ Không ai cần nói khoảng cách đó xa đến mức nào.
 
 Chiều đó Thiên Vũ nhận thêm việc chuyển hàng cho lão Tống.
 
-Khu vực trước cổng Huyền Thanh Các vẫn còn người tụ tập, nhưng không phải vì đăng ký. Là vì một cái tên đang truyền qua từng nhóm, từng người kể cho người kia nghe với vẻ của người vừa có tin có giá trị.
+Khu vực trước cổng Huyền Thanh Các vẫn còn người tụ tập. Không phải vì đăng ký nữa. Là vì một cái tên đang truyền qua từng nhóm với vẻ của người vừa có tin quan trọng.
 
-Lăng Khải sẽ đến ngày mai.
+Lăng Khải.
 
-Thiên Vũ nghe được tên đó qua ba cuộc trò chuyện khác nhau khi đi ngang khu này. Tên đó lặp lại đủ lần để hắn ghi nhận dù không chủ tâm nghe. Hòa Âm Đỉnh. Mười chín tuổi. Đệ tử sáng giá nhất thế hệ này của Huyền Thanh Các. Đăng ký Tuyển Âm như một thủ tục vì kết quả đã được biết trước.
+Thiên Vũ nghe tên đó qua ba cuộc trò chuyện khác nhau trên quãng đường giao hàng. Hòa Âm Đỉnh. Mười chín tuổi. Đệ tử sáng giá nhất thế hệ này của Huyền Thanh Các. Đăng ký Tuyển Âm như một thủ tục vì kết quả đã được biết trước. Có người nói sáng mai hắn ta sẽ xuất hiện trước cổng ngoài, chỉ để làm thủ tục, nhưng ai cũng muốn nhìn.
 
 Thiên Vũ giao hàng xong, nhận tiền, đi về theo lối cũ.
 
-Ngay trước khi rẽ vào hẻm dẫn về nhà trọ, hắn đi ngang qua tấm bảng gỗ lần thứ hai trong ngày. Lần này không dừng lại.
+Trên đường, hắn đi ngang qua góc đường lần thứ hai trong ngày.
 
-Một cơn gió chiều thổi qua góc đường, đủ mạnh để làm tờ danh sách phất lên. Giấy xoay nhẹ, các dòng chữ lung lay theo. Góc trên bên trái nhấc khỏi mặt bảng, rồi phủ xuống. Phần giữa tờ giấy gợn theo từng đợt gió.
+Lần này dừng lại.
 
-Phần dưới bên phải, cột ghi chú, không lay.
+Tấm bảng gỗ vẫn ở đó. Tờ danh sách vẫn còn đó, chữ viết tay, mực đã khô từ sáng. Cột ghi chú bên phải nhỏ hơn cột chính, nằm thấp hơn.
 
-Không phải giấy không lay. Cùng một tờ giấy, cùng một cơn gió. Nhưng đoạn chữ đó đứng yên trong khi phần còn lại của trang đang chuyển động.
+Tên hắn ở dòng thứ ba. Hai chữ bên cạnh: Không tầng.
 
-Thiên Vũ đã rẽ vào hẻm trước khi điều đó xảy ra. Hắn không thấy.
+Hắn đứng nhìn hai chữ đó đủ lâu để biết mình đang nhìn.
 
-Tờ danh sách này sẽ được tháo xuống sau ngày mồng mười. Thay bằng tờ khác, tờ của kỳ thi thật sự, chỉ có tên những người được phép thi.
+Rồi bước đi.
 
-Ngày mai Lăng Khải đến.
+Gió chiều thổi qua góc đường. Tờ danh sách phất lên, mép giấy gợn, các dòng chữ lung lay. Cột bên phải đứng yên trong khi phần còn lại của trang đang chuyển động.
+
+Hắn không nhìn lại.
+
+Sáng mai Lăng Khải sẽ đến.

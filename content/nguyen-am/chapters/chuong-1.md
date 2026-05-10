@@ -75,6 +75,10 @@ Rồi thầy Kiệt dừng lại.
 
 Không phải do ngạc nhiên. Ông đọc danh sách này đủ lần để thuộc phần cuối. Ông ngẩng lên khỏi bảng gỗ, mắt lướt qua đám người còn đứng, dừng lại ở khoảng không trước mặt Thiên Vũ. Không phải nhìn hắn. Nhìn qua hắn, như nhìn vào điểm nào đó ở phía sau.
 
+Thiên Vũ không cử động. Nhưng ngón tay của hắn, lúc đó đang khoanh trước ngực, siết nhẹ vào cánh tay kia một nhịp. Rồi thả ra.
+
+Phúc Lâm đứng bên cạnh. Nhìn thấy. Không nói gì.
+
 Bút lông di chuyển. Một dấu được ghi.
 
 "Trần Minh Khôi."
