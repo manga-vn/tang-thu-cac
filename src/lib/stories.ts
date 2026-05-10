@@ -166,9 +166,11 @@ export async function getNextChapter(storySlug: string, chapterSlug: string): Pr
 export async function getLatestChapters(limit = 5): Promise<{ story: Story; chapter: Chapter }[]> {
   const allChapters: { story: Story; chapter: Chapter }[] = [];
   const stories = await getAllStories();
-  stories.forEach(story => {
-    story.chapters.forEach(chapter => allChapters.push({ story, chapter }));
-  });
+  stories
+    .filter(story => story.featured === true)
+    .forEach(story => {
+      story.chapters.forEach(chapter => allChapters.push({ story, chapter }));
+    });
   return allChapters
     .sort((a, b) => {
       const dateDiff = new Date(b.chapter.publishedAt).getTime() - new Date(a.chapter.publishedAt).getTime();
